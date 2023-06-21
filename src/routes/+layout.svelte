@@ -13,9 +13,11 @@
 	{/if}
 </svelte:head>
 
-<h1 class="p-4 text-xl bg-zinc-700 text-white">{appName}</h1>
+<div class="py-3 px-2 bg-zinc-800 text-white">
+	<h1 class="text-lg">{appName}</h1>
+</div>
 
-<div class="w-[1200px] max-w-full m-auto">
+<div class="w-[1340px] max-w-full m-auto">
 	<div class="my-12 mx-6">
 		<slot />
 	</div>

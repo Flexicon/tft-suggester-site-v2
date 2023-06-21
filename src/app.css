@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body,
+html {
+	background-color: #f0f0f0;
+}
+
 .button {
-	@apply bg-slate-200 py-1 px-3 rounded-md hover:bg-slate-300 disabled:opacity-30;
-	@apply border border-slate-400;
-	@apply flex items-center justify-center gap-1;
+	@apply bg-white rounded-md border border-slate-300;
+	@apply py-1 px-3 flex items-center justify-center gap-1;
+	@apply disabled:opacity-30 hover:border-slate-400 active:border-slate-500;
 }
