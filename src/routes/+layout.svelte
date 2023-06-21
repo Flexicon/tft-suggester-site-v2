@@ -13,6 +13,10 @@
 	{/if}
 </svelte:head>
 
-<div>
-	<slot />
+<h1 class="p-4 text-xl bg-zinc-700 text-white">{appName}</h1>
+
+<div class="w-[1200px] max-w-full m-auto">
+	<div class="my-12 mx-6">
+		<slot />
+	</div>
 </div>
