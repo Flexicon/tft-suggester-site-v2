@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .button {
-	@apply bg-slate-200 p-2 rounded-md hover:bg-slate-300 disabled:opacity-30;
+	@apply bg-slate-200 py-1 px-3 rounded-md hover:bg-slate-300 disabled:opacity-30;
 	@apply border border-slate-400;
 	@apply flex items-center justify-center gap-1;
 }
