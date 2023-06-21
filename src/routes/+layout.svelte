@@ -17,7 +17,7 @@
 	<h1 class="text-lg">{appName}</h1>
 </div>
 
-<div class="w-[1340px] max-w-full m-auto">
+<div class="w-[1150px] 2xl:w-[1340px] max-w-full m-auto">
 	<div class="my-12 mx-6">
 		<slot />
 	</div>
