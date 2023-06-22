@@ -1,40 +1,38 @@
 <script lang="ts">
+	import ChampionPicker from '$lib/components/ChampionPicker.svelte';
+	import ChampionsSelected from '$lib/components/ChampionsSelected.svelte';
+	import CompsList from '$lib/components/CompsList.svelte';
+	import type { Champion } from '$lib/types';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	const { comps, champions } = data;
+	const { comps, champions, items } = data;
 
-	let showAll = false;
+	const topLimit = 5;
+	let showTop = false;
+	let selected: Champion[] = [];
 
-	$: visibleComps = showAll ? comps : comps.slice(0, 5);
+	function onChampSelected(event: CustomEvent<Champion>) {
+		console.log('Champion selected:', event.detail);
+	}
+
+	function onChampDeselected(event: CustomEvent<Champion>) {
+		console.log('Champion deselected:', event.detail);
+	}
 </script>
 
-<div class="champions-grid">
-	{#each champions as champ}
-		<div>
-			<img src={champ.image} alt="" />
-		</div>
-	{/each}
-</div>
+<ChampionPicker {champions} on:select={onChampSelected} />
 
-<button on:click={() => (showAll = !showAll)} class="button mb-5">
-	{#if showAll}
-		Show Less
-	{:else}
-		Show More
-	{/if}
-</button>
+<ChampionsSelected {selected} on:deselect={onChampDeselected} />
 
-<ul>
-	{#each visibleComps as comp}
-		<li>{comp.name} - {comp.tier} {comp.playstyle}</li>
-	{/each}
-</ul>
+{#if !selected.length}
+	<button on:click={() => (showTop = !showTop)} class="button mb-5">
+		{showTop ? 'Hide top' : 'Show top'}
+		{topLimit}
+	</button>
+{/if}
 
-<style lang="postcss">
-	.champions-grid {
-		@apply grid gap-1 grid-cols-4 mb-8 sm:grid-cols-8 md:grid-cols-10;
-		@apply lg:grid-cols-12 xl:grid-cols-[repeat(14,minmax(0,1fr))];
-	}
-</style>
+{#if selected.length || showTop}
+	<CompsList {comps} {selected} cheatsheetItems={items} {topLimit} />
+{/if}
