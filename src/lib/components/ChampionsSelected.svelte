@@ -4,7 +4,9 @@
 	export let selected: Champion[];
 </script>
 
-<p>Selected:</p>
+{#if selected.length}
+	<p>Selected:</p>
+{/if}
 
 <ul>
 	{#each selected as champ}

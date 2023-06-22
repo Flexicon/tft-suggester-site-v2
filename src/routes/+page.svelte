@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ChampionPicker from '$lib/components/ChampionPicker.svelte';
+	import ChampionSelector from '$lib/components/ChampionsSelector.svelte';
 	import ChampionsSelected from '$lib/components/ChampionsSelected.svelte';
 	import CompsList from '$lib/components/CompsList.svelte';
 	import type { Champion } from '$lib/types';
@@ -13,16 +13,16 @@
 	let showTop = false;
 	let selected: Champion[] = [];
 
-	function onChampSelected(event: CustomEvent<Champion>) {
-		console.log('Champion selected:', event.detail);
+	function onChampSelected({ detail: champ }: CustomEvent<Champion>) {
+		selected = [...selected, champ];
 	}
 
-	function onChampDeselected(event: CustomEvent<Champion>) {
-		console.log('Champion deselected:', event.detail);
+	function onChampDeselected({ detail: champ }: CustomEvent<Champion>) {
+		selected = selected.filter((c) => c.name !== champ.name);
 	}
 </script>
 
-<ChampionPicker {champions} on:select={onChampSelected} />
+<ChampionSelector {champions} {selected} on:select={onChampSelected} />
 
 <ChampionsSelected {selected} on:deselect={onChampDeselected} />
 
