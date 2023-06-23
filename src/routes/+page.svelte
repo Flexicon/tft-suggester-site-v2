@@ -27,7 +27,7 @@
 	}
 
 	function onChampSelected({ detail: champ }: CustomEvent<Champion>) {
-		selected = [...selected, champ];
+		selected = [...selected, champ].sort((a, b) => (a.name > b.name ? 1 : -1));
 		showTop = false;
 		setTimeout(() => updateQueryParams(), 100);
 	}
@@ -40,7 +40,7 @@
 
 <ChampionSelector {champions} {selected} on:select={onChampSelected} />
 
-<ChampionsSelected {selected} on:deselect={onChampDeselected} />
+<ChampionsSelected champions={selected} on:deselect={onChampDeselected} />
 
 {#if !selected.length}
 	<button on:click={() => (showTop = !showTop)} class="button mb-5">
