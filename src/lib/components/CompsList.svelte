@@ -7,8 +7,6 @@
 	export let topLimit: number;
 
 	$: visibleComps = selected.length ? [] : comps.slice(0, topLimit);
-
-	console.log(cheatsheetItems);
 </script>
 
 <ul>

@@ -1,50 +1,36 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { Champion } from '$lib/types';
+	import ChampionsGrid from './ChampionsGrid.svelte';
 
 	const dispatch = createEventDispatcher();
 
 	export let champions: Champion[];
 	export let selected: Champion[];
 
+	let query = '';
+
 	function filterChampions(champions: Champion[], selectedNames: string[], query: string) {
 		if (!query && !selectedNames.length) return champions;
 
-		const q = query.toLowerCase();
 		return champions.filter(
-			({ name }) => name.toLowerCase().includes(q) && !selectedNames.includes(name),
+			({ name }) => name.toLowerCase().includes(query) && !selectedNames.includes(name),
 		);
 	}
 
-	function selectChampion(champ: Champion) {
+	function selectChampion({ detail: champ }: CustomEvent<Champion>) {
 		query = '';
 		dispatch('select', champ);
 	}
 
-	let query = '';
-
 	$: showGrid = selected.length === 0 || query;
 	$: placeholder = selected.length ? 'Add a champion...' : 'Pick a champion...';
 	$: selectedNames = selected.map((c) => c.name);
-	$: filteredChampions = filterChampions(champions, selectedNames, query);
+	$: filteredChampions = filterChampions(champions, selectedNames, query.toLowerCase());
 </script>
 
-<input type="text" name="query" bind:value={query} {placeholder} />
+<input class="mb-5" type="text" name="query" bind:value={query} {placeholder} />
 
 {#if showGrid}
-	<div class="champions-grid">
-		{#each filteredChampions as champ}
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<div class="cursor-pointer" on:click={() => selectChampion(champ)}>
-				<img src={champ.image} alt="" />
-			</div>
-		{/each}
-	</div>
+	<ChampionsGrid champions={filteredChampions} on:select={selectChampion} />
 {/if}
-
-<style lang="postcss">
-	.champions-grid {
-		@apply grid gap-1 grid-cols-4 mb-8 sm:grid-cols-8 md:grid-cols-10;
-		@apply lg:grid-cols-12 xl:grid-cols-[repeat(14,minmax(0,1fr))];
-	}
-</style>
