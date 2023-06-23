@@ -33,4 +33,10 @@
 
 {#if showGrid}
 	<ChampionsGrid champions={filteredChampions} on:select={selectChampion} />
+
+	{#if !filteredChampions.length}
+		<p class="text-gray-500">
+			No matching champions for <em>{query}</em>
+		</p>
+	{/if}
 {/if}
