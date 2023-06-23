@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import ChampionSelector from '$lib/components/ChampionsSelector.svelte';
@@ -14,7 +15,7 @@
 	const topLimit = 5;
 	let showTop = false;
 
-	$: selectedNames = ($page.url.searchParams.get('selected') || '').split(',');
+	$: selectedNames = browser ? ($page.url.searchParams.get('selected') ?? '').split(',') : [];
 	$: selected = champions.filter((c) => selectedNames.includes(c.name));
 
 	function updateQueryParams() {
