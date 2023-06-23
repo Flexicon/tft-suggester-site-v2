@@ -29,12 +29,12 @@
 	function onChampSelected({ detail: champ }: CustomEvent<Champion>) {
 		selected = [...selected, champ];
 		showTop = false;
-		updateQueryParams();
+		setTimeout(() => updateQueryParams(), 100);
 	}
 
 	function onChampDeselected({ detail: champ }: CustomEvent<Champion>) {
 		selected = selected.filter((c) => c.name !== champ.name);
-		updateQueryParams();
+		setTimeout(() => updateQueryParams(), 100);
 	}
 </script>
 
