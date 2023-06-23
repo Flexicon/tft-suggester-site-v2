@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import ChampionSelector from '$lib/components/ChampionsSelector.svelte';
 	import ChampionsSelected from '$lib/components/ChampionsSelected.svelte';
 	import CompsList from '$lib/components/CompsList.svelte';
@@ -13,12 +14,23 @@
 	let showTop = false;
 	let selected: Champion[] = [];
 
+	function updateQueryParams() {
+		if (!selected.length) {
+			goto('/');
+		} else {
+			goto(`/?${new URLSearchParams({ selected: selected.map((c) => c.name).join(',') })}`);
+		}
+	}
+
 	function onChampSelected({ detail: champ }: CustomEvent<Champion>) {
 		selected = [...selected, champ];
+		showTop = false;
+		updateQueryParams();
 	}
 
 	function onChampDeselected({ detail: champ }: CustomEvent<Champion>) {
 		selected = selected.filter((c) => c.name !== champ.name);
+		updateQueryParams();
 	}
 </script>
 
