@@ -14,7 +14,7 @@
 </svelte:head>
 
 <div class="py-3 px-2 bg-zinc-800 text-white">
-	<h1 class="text-lg">{appName}</h1>
+	<h1 class="text-lg"><a href="/">{appName}</a></h1>
 </div>
 
 <div class="w-[1150px] 2xl:w-[1340px] max-w-full m-auto">
