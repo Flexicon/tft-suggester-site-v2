@@ -6,14 +6,24 @@
 	const dispatch = createEventDispatcher();
 
 	export let champion: Champion;
-	// export let cancellable: boolean = false;
+	export let cancellable: boolean = false;
 	export let selected: boolean = false;
-	// export let noItems: boolean = false;
+	export let noItems: boolean = false;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class={`champion-avatar c${champion.cost}`} class:selected on:click={() => dispatch('click')}>
+	{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
+	{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
 	<img class="avatar-image" src={champion.image} alt={champion.name} title={champion.name} />
+
+	{#if !noItems && champion.items}
+		<div class="item-images">
+			{#each champion.items as item}
+				<img src={item.image} alt={item.name} />
+			{/each}
+		</div>
+	{/if}
 </div>
 
 <style lang="postcss">
