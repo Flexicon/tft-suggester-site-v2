@@ -1,27 +1,37 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
-	import type { Champion } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
+	import type { Champion } from '$lib/types';
+	import ChampionAvatar from './ChampionAvatar.svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let selected: Champion[];
+	export let champions: Champion[];
 </script>
 
-{#if selected.length}
-	<p>Selected:</p>
-{/if}
-
-<ul>
-	{#each selected as champ}
-		<li class="flex items-center gap-1">
-			<button
-				class="text-red-500 hover:text-red-600 hover:underline"
-				on:click={() => dispatch('deselect', champ)}
-			>
-				<Icon icon="mdi:close-circle" />
-			</button>
-			<span>{champ.name}</span>
-		</li>
+<div class="champions-selected">
+	{#each champions as champion}
+		<ChampionAvatar {champion} cancellable on:click={() => dispatch('deselect', champion)} />
 	{/each}
-</ul>
+</div>
+
+<style lang="postcss">
+	.champions-selected {
+		display: grid;
+		grid-template-columns: repeat(8, 1fr);
+		grid-gap: 5px;
+		padding: 1rem 0.25rem;
+	}
+
+	@media screen and (min-width: 768px) {
+		.champions-selected {
+			grid-template-columns: repeat(16, 1fr);
+			grid-gap: 8px;
+		}
+	}
+
+	@media screen and (min-width: 1024px) {
+		.champions-selected {
+			grid-template-columns: repeat(20, 1fr);
+		}
+	}
+</style>
