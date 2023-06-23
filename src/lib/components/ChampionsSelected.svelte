@@ -16,22 +16,7 @@
 
 <style lang="postcss">
 	.champions-selected {
-		display: grid;
-		grid-template-columns: repeat(8, 1fr);
-		grid-gap: 5px;
-		padding: 1rem 0.25rem;
-	}
-
-	@media screen and (min-width: 768px) {
-		.champions-selected {
-			grid-template-columns: repeat(16, 1fr);
-			grid-gap: 8px;
-		}
-	}
-
-	@media screen and (min-width: 1024px) {
-		.champions-selected {
-			grid-template-columns: repeat(20, 1fr);
-		}
+		@apply grid grid-cols-8 gap-1 py-4 px-1;
+		@apply md:gap-2 md:grid-cols-[repeat(16,1fr)] lg:grid-cols-[repeat(20,1fr)];
 	}
 </style>
