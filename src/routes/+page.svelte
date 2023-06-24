@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Icon from '@iconify/svelte';
 
 	import ChampionSelector from '$lib/components/ChampionsSelector.svelte';
 	import ChampionsSelected from '$lib/components/ChampionsSelected.svelte';
@@ -14,7 +15,7 @@
 	const { comps, champions, items } = data;
 
 	const topLimit = 5;
-	let showTop = true;
+	let showTop = false;
 
 	$: selectedNames = browser ? ($page.url.searchParams.get('selected') ?? '').split(',') : [];
 	$: selected = champions.filter((c) => selectedNames.includes(c.name));
@@ -45,11 +46,19 @@
 
 {#if !selected.length}
 	<button on:click={() => (showTop = !showTop)} class="button mb-5">
+		<Icon icon={showTop ? 'mdi:hide' : 'mdi:show'} />
 		{showTop ? 'Hide top' : 'Show top'}
 		{topLimit}
 	</button>
 {/if}
 
 {#if selected.length || showTop}
-	<CompsList {comps} {selected} cheatsheetItems={items} {topLimit} />
+	<CompsList
+		{comps}
+		{selected}
+		cheatsheetItems={items}
+		{topLimit}
+		on:select-champion={onChampSelected}
+		on:deselect-champion={onChampDeselected}
+	/>
 {/if}

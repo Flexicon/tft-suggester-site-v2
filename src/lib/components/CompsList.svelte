@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import { compFilterFn, compSortFn } from '$lib/data/comps';
 	import type { Champion, Comp, Item } from '$lib/types';
 	import CompsListItem from './CompsListItem.svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let comps: Comp[];
 	export let selected: Champion[];
@@ -13,10 +16,24 @@
 	$: filteredComps = selected.length
 		? sortedComps.filter(compFilterFn(selectedNames))
 		: sortedComps.slice(0, topLimit);
+
+	function selectChampion({ detail: champion }: CustomEvent<Champion>) {
+		dispatch('select-champion', champion);
+	}
+
+	function deselectChampion({ detail: champion }: CustomEvent<Champion>) {
+		dispatch('deselect-champion', champion);
+	}
 </script>
 
-<ul>
+<div class="comps-list">
 	{#each filteredComps as comp}
-		<CompsListItem {comp} {selectedNames} {cheatsheetItems} />
+		<CompsListItem
+			{comp}
+			{selectedNames}
+			{cheatsheetItems}
+			on:select-champion={selectChampion}
+			on:deselect-champion={deselectChampion}
+		/>
 	{/each}
-</ul>
+</div>

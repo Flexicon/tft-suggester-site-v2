@@ -12,7 +12,7 @@ export const compSortFn = (selectedNames: string[]) => (a: Comp, b: Comp) => {
 	}
 
 	if (a.tier === b.tier) {
-		return 0;
+		return a.name < b.name ? -1 : 1;
 	} else if (a.tier === 'S') {
 		return -1;
 	} else if (b.tier === 'S') {

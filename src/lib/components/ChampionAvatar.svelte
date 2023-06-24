@@ -9,10 +9,18 @@
 	export let cancellable: boolean = false;
 	export let selected: boolean = false;
 	export let noItems: boolean = false;
+
+	function onClick() {
+		dispatch('click');
+	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class={`champion-avatar c${champion.cost}`} class:selected on:click={() => dispatch('click')}>
+<div
+	class={`champion-avatar c${champion.cost}`}
+	class:selected
+	on:click={onClick}
+	on:keydown={onClick}
+>
 	{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 	{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
 	<img class="avatar-image" src={champion.image} alt={champion.name} title={champion.name} />
@@ -33,6 +41,7 @@
 		border-width: 3px;
 		border-style: solid;
 		border-radius: 3px;
+		aspect-ratio: 1 / 1;
 	}
 
 	.avatar-image {

@@ -19,7 +19,7 @@
 	{/if}
 </svelte:head>
 
-<div class="py-3 px-2 bg-zinc-800 text-white">
+<div class="py-3 px-4 bg-stone-800 text-white">
 	<h1 class="text-lg"><a href="/">{appName}</a></h1>
 </div>
 

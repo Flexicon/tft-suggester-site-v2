@@ -9,6 +9,6 @@ html {
 
 .button {
 	@apply bg-white rounded-md border border-slate-300;
-	@apply py-1 px-3 flex items-center justify-center gap-1;
+	@apply py-1 px-3 flex items-center justify-center gap-2;
 	@apply disabled:opacity-30 hover:border-slate-400 active:border-slate-500;
 }
