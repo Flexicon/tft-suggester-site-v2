@@ -39,6 +39,9 @@
 							{#each componentsFor(item) as component}
 								<img class="composite-item" src={component.image} alt={component.name} />
 							{/each}
+							{#if !componentsFor(item).length}
+								<span class="text-3xl">🤷‍♂️</span>
+							{/if}
 						</div>
 						<Icon class="text-2xl" icon="mingcute:arrow-right-fill" />
 						<img class="composite-item" src={item.image} alt={item.name} />
