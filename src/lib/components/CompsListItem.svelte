@@ -3,6 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import type { Champion, Comp, Item } from '$lib/types';
 	import ChampionAvatar from './ChampionAvatar.svelte';
+	import ItemCheatsheet from './ItemCheatsheet.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -49,9 +50,9 @@
 		{/each}
 	</div>
 
-	<div>
-		<!-- <comp-item-cheatsheet :comp="comp" :cheatsheet="cheatsheet" /> -->
-	</div>
+	{#if isCheatsheetOpen}
+		<ItemCheatsheet {comp} {cheatsheetItems} />
+	{/if}
 </div>
 
 <style lang="postcss">
