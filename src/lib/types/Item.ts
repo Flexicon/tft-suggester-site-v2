@@ -1,10 +1,7 @@
 export interface Item {
 	name: string;
 	image: string;
-	components: Component[];
+	components: SimpleItem[];
 }
 
-interface Component {
-	name: string;
-	image: string;
-}
+export type SimpleItem = Pick<Item, 'name' | 'image'>;
