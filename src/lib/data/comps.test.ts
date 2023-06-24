@@ -7,14 +7,12 @@ describe('data:comps:compSortFn', () => {
 
 	it('should sort according to tier only when given empty list', () => {
 		const result = comps.slice().sort(compSortFn([]));
-
-		assert.deepEqual(result, [comps[2], comps[0], comps[1]]);
+		assert.deepEqual(compNames(result), namesByIndex(comps, [2, 0, 3, 1]));
 	});
 
 	it('should sort according to selected list and tier', () => {
 		const result = comps.slice().sort(compSortFn(['Ashe', 'Akshan']));
-
-		assert.deepEqual(result, [comps[1], comps[2], comps[0]]);
+		assert.deepEqual(compNames(result), namesByIndex(comps, [1, 2, 0, 3]));
 	});
 });
 
@@ -33,29 +31,37 @@ describe('data:comps:compFilterFn', () => {
 
 	it('should filter to match given list ["Ashe"]', () => {
 		const result = comps.filter(compFilterFn(['Ashe']));
-		assert.deepEqual(result, [comps[1]]);
+		assert.deepEqual(compNames(result), [comps[1].name]);
 	});
 
 	it('should filter to match given list ["Galio"]', () => {
 		const result = comps.filter(compFilterFn(['Galio']));
-		assert.deepEqual(result, [comps[2]]);
+		assert.deepEqual(compNames(result), [comps[2].name]);
 	});
 
 	it('should filter to match given list ["Galio"]', () => {
 		const result = comps.filter(compFilterFn(['Galio']));
-		assert.deepEqual(result, [comps[2]]);
+		assert.deepEqual(compNames(result), [comps[2].name]);
 	});
 
 	it('should filter to match given list ["Galio", "Foo"]', () => {
 		const result = comps.filter(compFilterFn(['Galio', 'Foo']));
-		assert.deepEqual(result, [comps[2]]);
+		assert.deepEqual(compNames(result), [comps[2].name]);
 	});
 
 	it('should filter to match given list ["Galio", "Foo", "Lissandra", "Taric"]', () => {
 		const result = comps.filter(compFilterFn(['Galio', 'Foo', 'Lissandra', 'Taric']));
-		assert.deepEqual(result, comps);
+		assert.deepEqual(compNames(result), namesByIndex(comps, [0, 1, 2]));
 	});
 });
+
+function compNames(comps: Comp[]): string[] {
+	return comps.map((c) => c.name);
+}
+
+function namesByIndex(comps: Comp[], indexes: number[]): string[] {
+	return indexes.map((i) => comps[i].name);
+}
 
 function buildSampleComps() {
 	return [
@@ -373,6 +379,114 @@ function buildSampleComps() {
 				{
 					champion: 'Ryze Bandle City',
 					items: [],
+				},
+			],
+		},
+		{
+			name: 'Voids',
+			champions: [
+				{
+					name: 'Chogath',
+					image: 'https://rerollcdn.com/characters/Skin/9/Chogath.png',
+					cost: 1,
+				},
+				{
+					name: 'Malzahar',
+					image: 'https://rerollcdn.com/characters/Skin/9/Malzahar.png',
+					cost: 1,
+				},
+				{
+					name: 'Kassadin',
+					image: 'https://rerollcdn.com/characters/Skin/9/Kassadin.png',
+					cost: 2,
+				},
+				{
+					name: 'RekSai',
+					image: 'https://rerollcdn.com/characters/Skin/9/RekSai.png',
+					cost: 3,
+				},
+				{
+					name: 'Velkoz',
+					image: 'https://rerollcdn.com/characters/Skin/9/Velkoz.png',
+					cost: 3,
+				},
+				{
+					name: 'Kaisa',
+					image: 'https://rerollcdn.com/characters/Skin/9/Kaisa.png',
+					cost: 4,
+				},
+				{
+					name: 'Yasuo',
+					image: 'https://rerollcdn.com/characters/Skin/9/Yasuo.png',
+					cost: 4,
+				},
+				{
+					name: 'Belveth',
+					image: 'https://rerollcdn.com/characters/Skin/9/Belveth.png',
+					cost: 5,
+				},
+			],
+			tier: 'A',
+			playstyle: 'Fast 8',
+			item_recommendations: [
+				{
+					champion: 'Chogath',
+					items: [],
+				},
+				{
+					champion: 'Malzahar',
+					items: [],
+				},
+				{
+					champion: 'Kassadin',
+					items: [],
+				},
+				{
+					champion: 'RekSai',
+					items: [],
+				},
+				{
+					champion: 'Velkoz',
+					items: [],
+				},
+				{
+					champion: 'Kaisa',
+					items: [
+						{
+							name: "Guinsoo's Rageblade",
+							image: 'https://rerollcdn.com/items/GuinsoosRageblade.png',
+						},
+						{
+							name: 'Hextech Gunblade',
+							image: 'https://rerollcdn.com/items/HextechGunblade.png',
+						},
+						{
+							name: 'Jeweled Gauntlet',
+							image: 'https://rerollcdn.com/items/JeweledGauntlet.png',
+						},
+					],
+				},
+				{
+					champion: 'Yasuo',
+					items: [
+						{
+							name: 'Void Emblem',
+							image: 'https://rerollcdn.com/items/VoidEmblem.png',
+						},
+					],
+				},
+				{
+					champion: 'Belveth',
+					items: [
+						{
+							name: 'Bloodthirster',
+							image: 'https://rerollcdn.com/items/Bloodthirster.png',
+						},
+						{
+							name: "Titan's Resolve",
+							image: 'https://rerollcdn.com/items/TitansResolve.png',
+						},
+					],
 				},
 			],
 		},
