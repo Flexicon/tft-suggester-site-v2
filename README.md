@@ -6,8 +6,8 @@ Rebuilt in [SvelteKit](https://kit.svelte.dev/) and [Tailwind](https://tailwindc
 
 - [x] Sort comps list
 - [ ] Render out comps list cards
-  - [ ] General card layout with comp tier, name and playstyle
-  - [ ] Champion avatars
+  - [x] General card layout with comp tier, name and playstyle
+  - [x] Champion avatars
   - [ ] Assign items to champions in comps
   - [ ] Match items with cheatsheet
   - [ ] Setup cheatsheet collapsible
