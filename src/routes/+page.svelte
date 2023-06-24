@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+
 	import ChampionSelector from '$lib/components/ChampionsSelector.svelte';
 	import ChampionsSelected from '$lib/components/ChampionsSelected.svelte';
 	import CompsList from '$lib/components/CompsList.svelte';
@@ -13,7 +14,7 @@
 	const { comps, champions, items } = data;
 
 	const topLimit = 5;
-	let showTop = false;
+	let showTop = true;
 
 	$: selectedNames = browser ? ($page.url.searchParams.get('selected') ?? '').split(',') : [];
 	$: selected = champions.filter((c) => selectedNames.includes(c.name));

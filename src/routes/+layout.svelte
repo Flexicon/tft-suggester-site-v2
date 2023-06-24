@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Footer from '$lib/components/Footer.svelte';
 	import '../app.css';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+
+	const { buildTime, versionHash } = data;
 
 	const appName = 'TFT Suggester';
 </script>
@@ -17,8 +23,12 @@
 	<h1 class="text-lg"><a href="/">{appName}</a></h1>
 </div>
 
-<div class="w-[1150px] 2xl:w-[1340px] max-w-full m-auto">
-	<div class="my-12 mx-6">
-		<slot />
+<main class="flex flex-col min-h-[calc(100vh-3.25rem)]">
+	<div class="w-[1150px] 2xl:w-[1340px] max-w-full m-auto flex-auto">
+		<div class="my-12 mx-6">
+			<slot />
+		</div>
 	</div>
-</div>
+
+	<Footer {buildTime} {versionHash} />
+</main>
