@@ -2,6 +2,7 @@
 	import type { Champion, Comp, Item, SimpleItem } from '$lib/types';
 	import Icon from '@iconify/svelte';
 	import ChampionAvatar from './ChampionAvatar.svelte';
+	import Tooltip from './Tooltip.svelte';
 
 	type Cheatsheet = Record<string, Item>;
 
@@ -29,7 +30,7 @@
 	{#each championsWithItems as champion}
 		<div class="flex gap-4 mb-5">
 			<div class="w-12">
-				<ChampionAvatar {champion} noItems />
+				<ChampionAvatar {champion} noItems noClick />
 			</div>
 
 			<div>
@@ -37,14 +38,18 @@
 					<div class="flex items-center gap-3 mb-2">
 						<div class="flex gap-1">
 							{#each componentsFor(item) as component}
-								<img class="composite-item" src={component.image} alt={component.name} />
+								<Tooltip title={component.name}>
+									<img class="composite-item" src={component.image} alt={component.name} />
+								</Tooltip>
 							{/each}
 							{#if !componentsFor(item).length}
 								<span class="text-3xl">🤷‍♂️</span>
 							{/if}
 						</div>
 						<Icon class="text-2xl" icon="mingcute:arrow-right-fill" />
-						<img class="composite-item" src={item.image} alt={item.name} />
+						<Tooltip title={item.name}>
+							<img class="composite-item" src={item.image} alt={item.name} />
+						</Tooltip>
 					</div>
 				{/each}
 			</div>

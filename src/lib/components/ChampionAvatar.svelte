@@ -10,15 +10,19 @@
 	export let cancellable: boolean = false;
 	export let selected: boolean = false;
 	export let noItems: boolean = false;
+	export let noClick: boolean = false;
 
 	function onClick() {
-		dispatch('click');
+		if (!noClick) {
+			dispatch('click');
+		}
 	}
 </script>
 
 <Tooltip title={`${champion.name} - ${champion.cost}g`}>
 	<div
 		class={`champion-avatar c${champion.cost}`}
+		class:noClick
 		class:selected
 		on:click={onClick}
 		on:keydown={onClick}
@@ -40,11 +44,14 @@
 <style lang="postcss">
 	.champion-avatar {
 		position: relative;
-		cursor: pointer;
 		border-width: 3px;
 		border-style: solid;
 		border-radius: 3px;
 		aspect-ratio: 1 / 1;
+	}
+
+	.champion-avatar:not(.noClick) {
+		cursor: pointer;
 	}
 
 	.avatar-image {
