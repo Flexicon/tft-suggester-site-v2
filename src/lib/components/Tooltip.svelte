@@ -1,8 +1,8 @@
 <script lang="ts">
 	export let title = '';
 
-	const xOffset = 0;
-	const yOffset = -40;
+	const xOffset = -25;
+	const yOffset = 20;
 
 	let isHovered = false;
 	let x: number;
@@ -48,6 +48,6 @@
 
 <style lang="postcss">
 	.tooltip {
-		@apply absolute text-black bg-zinc-50 rounded p-1 z-50 border border-zinc-300 shadow;
+		@apply absolute text-black text-xs bg-zinc-50 rounded p-1 z-50 border border-zinc-300 shadow;
 	}
 </style>
