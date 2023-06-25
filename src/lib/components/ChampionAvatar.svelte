@@ -2,6 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { Champion } from '$lib/types';
+	import Tooltip from './Tooltip.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -15,24 +16,26 @@
 	}
 </script>
 
-<div
-	class={`champion-avatar c${champion.cost}`}
-	class:selected
-	on:click={onClick}
-	on:keydown={onClick}
->
-	{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
-	{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
-	<img class="avatar-image" src={champion.image} alt={champion.name} title={champion.name} />
+<Tooltip title={`${champion.name} - ${champion.cost}g`}>
+	<div
+		class={`champion-avatar c${champion.cost}`}
+		class:selected
+		on:click={onClick}
+		on:keydown={onClick}
+	>
+		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
+		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
+		<img class="avatar-image" src={champion.image} alt={champion.name} title={champion.name} />
 
-	{#if !noItems && champion.items}
-		<div class="item-images">
-			{#each champion.items as item}
-				<img src={item.image} alt={item.name} />
-			{/each}
-		</div>
-	{/if}
-</div>
+		{#if !noItems && champion.items}
+			<div class="item-images">
+				{#each champion.items as item}
+					<img src={item.image} alt={item.name} />
+				{/each}
+			</div>
+		{/if}
+	</div>
+</Tooltip>
 
 <style lang="postcss">
 	.champion-avatar {
