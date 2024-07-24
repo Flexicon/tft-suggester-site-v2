@@ -21,6 +21,8 @@
 		"@types/node": "^20.3.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
+		"@vite-pwa/assets-generator": "^0.2.4",
+		"@vite-pwa/sveltekit": "^0.6.0",
 		"@vitest/coverage-v8": "^2.0.4",
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.28.0",
