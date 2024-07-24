@@ -6,7 +6,6 @@ type ChampItems = Record<string, ItemRecommendation['items']>;
 
 export const load = (async () => {
 	return {
-		title: 'Comps',
 		comps: (await fetchComps()).map(mapCompItemsToChamps),
 		champions: (await fetchChampions()).sort((a, b) => (a.name > b.name ? 1 : -1)),
 		items: await fetchItems(),
