@@ -2,15 +2,17 @@
 	import { page } from '$app/stores';
 	import Footer from '$lib/components/Footer.svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
-	import '../app.css';
-	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
+	import '../app.css';
+	import logo from '$lib/nav-logo.png';
+	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 
 	const { buildTime, versionHash } = data;
-
 	const appName = 'TFT Suggester';
+
+	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
 	onMount(async () => {
 		if (pwaInfo) {
@@ -26,8 +28,6 @@
 			});
 		}
 	});
-
-	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
 <svelte:head>
@@ -40,7 +40,12 @@
 </svelte:head>
 
 <div class="py-3 px-4 bg-stone-800 text-white">
-	<h1 class="text-lg"><a href="/">{appName}</a></h1>
+	<h1 class="text-lg">
+		<a href="/" class="flex items-center gap-2">
+			<img width="40px" alt="App logo" src={logo} />
+			<span>{appName}</span>
+		</a>
+	</h1>
 </div>
 
 <main class="flex flex-col min-h-[calc(100vh-3.25rem)]">
