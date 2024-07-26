@@ -6,6 +6,7 @@ export default defineConfig({
 	plugins: [
 		sveltekit(),
 		SvelteKitPWA({
+			registerType: 'autoUpdate',
 			manifest: {
 				short_name: 'TFT Suggester',
 				name: 'TFT Suggester',
