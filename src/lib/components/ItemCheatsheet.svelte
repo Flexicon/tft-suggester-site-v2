@@ -16,9 +16,14 @@
 	);
 
 	function uniqueItemsFor(champion: Champion): SimpleItem[] {
-		const itemNames = new Set(champion.items?.map((i) => i.name) ?? []);
-
-		return champion.items?.filter((item) => itemNames.has(item.name)) ?? [];
+		const memo = new Set();
+		return (
+			champion.items?.filter((i) => {
+				if (memo.has(i.name)) return false;
+				memo.add(i.name);
+				return true;
+			}) ?? []
+		);
 	}
 
 	function componentsFor(item: SimpleItem): SimpleItem[] {
