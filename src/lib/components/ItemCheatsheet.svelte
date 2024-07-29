@@ -10,10 +10,7 @@
 	export let cheatsheetItems: Item[];
 
 	$: championsWithItems = comp.champions.filter((c) => c.items?.length);
-	$: cheatsheet = cheatsheetItems.reduce<Cheatsheet>(
-		(sheet, i) => ({ ...sheet, [i.name.toLowerCase()]: i }),
-		{},
-	);
+	$: cheatsheet = Object.fromEntries(cheatsheetItems.map((i) => [i.name.toLowerCase(), i]));
 
 	function uniqueItemsFor(champion: Champion): SimpleItem[] {
 		const memo = new Set();
@@ -40,18 +37,18 @@
 
 			<div>
 				{#each uniqueItemsFor(champion) as item}
+					{@const components = componentsFor(item)}
 					<div class="flex items-center gap-3 mb-2">
-						<div class="flex gap-1">
-							{#each componentsFor(item) as component}
-								<Tooltip title={component.name}>
-									<img class="composite-item" src={component.image} alt={component.name} />
-								</Tooltip>
-							{/each}
-							{#if !componentsFor(item).length}
-								<span class="text-3xl">🤷‍♂️</span>
-							{/if}
-						</div>
-						<Icon class="text-2xl" icon="mingcute:arrow-right-fill" />
+						{#if components.length}
+							<div class="flex gap-1">
+								{#each components as component}
+									<Tooltip title={component.name}>
+										<img class="composite-item" src={component.image} alt={component.name} />
+									</Tooltip>
+								{/each}
+							</div>
+							<Icon class="text-2xl" icon="mingcute:arrow-right-fill" />
+						{/if}
 						<Tooltip title={item.name}>
 							<img class="composite-item" src={item.image} alt={item.name} />
 						</Tooltip>
