@@ -4,8 +4,6 @@
 	import ChampionAvatar from './ChampionAvatar.svelte';
 	import Tooltip from './Tooltip.svelte';
 
-	type Cheatsheet = Record<string, Item>;
-
 	export let comp: Comp;
 	export let cheatsheetItems: Item[];
 
