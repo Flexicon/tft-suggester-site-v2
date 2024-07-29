@@ -1,5 +1,7 @@
 import type { Champion, Comp, Item } from '$lib/types';
 
+const apiBase = 'https://tft-suggester-api.nerfthis.xyz';
+
 export async function fetchResource<T>(url: string): Promise<T> {
 	const res = await fetch(url);
 	if (res.status !== 200) {
@@ -10,13 +12,13 @@ export async function fetchResource<T>(url: string): Promise<T> {
 }
 
 export async function fetchComps(): Promise<Comp[]> {
-	return fetchResource('https://tft-suggester-api.nerfthis.xyz/comps');
+	return fetchResource(`${apiBase}/comps`);
 }
 
 export async function fetchChampions(): Promise<Champion[]> {
-	return fetchResource('https://tft-suggester-api.nerfthis.xyz/champions');
+	return fetchResource(`${apiBase}/champions`);
 }
 
 export async function fetchItems(): Promise<Item[]> {
-	return fetchResource('https://tft-suggester-api.nerfthis.xyz/items');
+	return fetchResource(`${apiBase}/items`);
 }
