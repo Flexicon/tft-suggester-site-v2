@@ -31,7 +31,13 @@
 <div class="comps-list-item">
 	<div class="title">
 		<span class={`tier tier-${comp.tier.toLowerCase()}`}>{comp.tier}</span>
-		<div class="name-and-playstyle" on:click={toggleCheatsheet} on:keydown={toggleCheatsheet}>
+		<div
+			class="name-and-playstyle"
+			on:click={toggleCheatsheet}
+			on:keydown={toggleCheatsheet}
+			role="button"
+			tabindex="0"
+		>
 			<div class="name">
 				<span>{comp.name}</span>
 				<Icon class="text-2xl" icon={isCheatsheetOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} />

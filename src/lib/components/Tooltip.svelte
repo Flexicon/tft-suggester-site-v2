@@ -23,21 +23,22 @@
 		isHovered = false;
 	}
 
-	function focusIn(event: FocusEvent) {
+	function focusIn(_: FocusEvent) {
 		isHovered = true;
 	}
 
-	function focusOut(event: FocusEvent) {
+	function focusOut(_: FocusEvent) {
 		isHovered = false;
 	}
 </script>
 
 <div
+	role="tooltip"
 	on:mouseover={mouseOver}
 	on:mouseleave={mouseLeave}
 	on:mousemove={mouseMove}
 	on:focus={focusIn}
-	on:focusout={focusIn}
+	on:focusout={focusOut}
 >
 	<slot />
 </div>

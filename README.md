@@ -9,4 +9,3 @@ Built with ☕️ and ❤️, using [SvelteKit](https://kit.svelte.dev/) and [Ta
 - [Stats](https://tft-suggester.goatcounter.com/)
 - [Backend and web scraper](https://github.com/Flexicon/tft-suggester)
 - [Roadmap](https://github.com/users/Flexicon/projects/1)
-

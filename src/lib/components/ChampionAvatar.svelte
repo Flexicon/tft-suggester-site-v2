@@ -7,10 +7,10 @@
 	const dispatch = createEventDispatcher();
 
 	export let champion: Champion;
-	export let cancellable: boolean = false;
-	export let selected: boolean = false;
-	export let noItems: boolean = false;
-	export let noClick: boolean = false;
+	export let cancellable = false;
+	export let selected = false;
+	export let noItems = false;
+	export let noClick = false;
 
 	function onClick() {
 		if (!noClick) {
@@ -26,6 +26,8 @@
 		class:selected
 		on:click={onClick}
 		on:keydown={onClick}
+		role="button"
+		tabindex="0"
 	>
 		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
