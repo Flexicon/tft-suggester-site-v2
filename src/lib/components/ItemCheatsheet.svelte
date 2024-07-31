@@ -41,14 +41,19 @@
 							<div class="flex gap-1">
 								{#each components as component}
 									<Tooltip title={component.name}>
-										<img class="composite-item" src={component.image} alt={component.name} />
+										<img
+											class="composite-item"
+											src={component.image}
+											alt={component.name}
+											loading="lazy"
+										/>
 									</Tooltip>
 								{/each}
 							</div>
 							<Icon class="text-2xl" icon="mingcute:arrow-right-fill" />
 						{/if}
 						<Tooltip title={item.name}>
-							<img class="composite-item" src={item.image} alt={item.name} />
+							<img class="composite-item" src={item.image} alt={item.name} loading="lazy" />
 						</Tooltip>
 					</div>
 				{/each}

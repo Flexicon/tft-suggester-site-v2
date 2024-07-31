@@ -31,12 +31,18 @@
 	>
 		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
-		<img class="avatar-image" src={champion.image} alt={champion.name} title={champion.name} />
+		<img
+			class="avatar-image"
+			src={champion.image}
+			alt={champion.name}
+			title={champion.name}
+			loading="lazy"
+		/>
 
 		{#if !noItems && champion.items}
 			<div class="item-images">
 				{#each champion.items as item}
-					<img src={item.image} alt={item.name} />
+					<img src={item.image} alt={item.name} loading="lazy" />
 				{/each}
 			</div>
 		{/if}
