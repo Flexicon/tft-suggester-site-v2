@@ -27,7 +27,7 @@
 </script>
 
 <div class="comps-list">
-	{#each filteredComps as comp}
+	{#each filteredComps as comp (`${comp.name}-${comp.tier}-${comp.playstyle}`)}
 		<CompsListItem
 			{comp}
 			{selectedNames}
