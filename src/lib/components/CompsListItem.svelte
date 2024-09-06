@@ -20,6 +20,12 @@
 		isCheatsheetOpen = !isCheatsheetOpen;
 	}
 
+	function toggleCheatsheetKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			toggleCheatsheet();
+		}
+	}
+
 	function onChampionClick(champion: Champion) {
 		dispatch(
 			selectedInComp.includes(champion.name) ? 'deselect-champion' : 'select-champion',
@@ -34,7 +40,7 @@
 		<div
 			class="name-and-playstyle"
 			on:click={toggleCheatsheet}
-			on:keydown={toggleCheatsheet}
+			on:keydown={toggleCheatsheetKeydown}
 			role="button"
 			tabindex="0"
 		>

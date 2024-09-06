@@ -17,6 +17,12 @@
 			dispatch('click');
 		}
 	}
+
+	function onKeyDown(event: KeyboardEvent) {
+		if (!noClick && event.key === 'Enter') {
+			onClick();
+		}
+	}
 </script>
 
 <Tooltip title={`${champion.name} - ${champion.cost}g`}>
@@ -25,9 +31,9 @@
 		class:noClick
 		class:selected
 		on:click={onClick}
-		on:keydown={onClick}
+		on:keydown={onKeyDown}
 		role="button"
-		tabindex="0"
+		tabindex={noClick ? -1 : 0}
 	>
 		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
