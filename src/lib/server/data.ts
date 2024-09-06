@@ -12,7 +12,7 @@ export async function fetchResource<T>(url: string): Promise<T> {
 }
 
 export async function fetchComps(): Promise<Comp[]> {
-	return fetchResource(`${apiBase}/comps`);
+	return (await fetchResource<Comp[]>(`${apiBase}/comps`)).map(mapCompItems);
 }
 
 export async function fetchChampions(): Promise<Champion[]> {
@@ -21,4 +21,15 @@ export async function fetchChampions(): Promise<Champion[]> {
 
 export async function fetchItems(): Promise<Item[]> {
 	return fetchResource(`${apiBase}/items`);
+}
+
+function mapCompItems(comp: Comp): Comp {
+	const itemsByChamp = Object.fromEntries(
+		comp.item_recommendations.map((ir) => [ir.champion, ir.items]),
+	);
+
+	return {
+		...comp,
+		champions: comp.champions.map((c) => ({ ...c, items: itemsByChamp[c.name] ?? [] })),
+	} satisfies Comp;
 }
