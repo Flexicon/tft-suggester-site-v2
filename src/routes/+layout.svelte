@@ -42,7 +42,7 @@
 <div class="py-3 px-4 bg-stone-800 text-white">
 	<h1 class="text-lg">
 		<a href="/" class="flex items-center gap-2">
-			<img width="40px" alt="App logo" src={logo} />
+			<img width="40px" height="40px" alt="App logo" src={logo} />
 			<span>{appName}</span>
 		</a>
 	</h1>

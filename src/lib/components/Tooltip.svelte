@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let title = '';
+	export let disabled = false;
 
 	const xOffset = -25;
 	const yOffset = 20;
@@ -32,19 +33,23 @@
 	}
 </script>
 
-<div
-	role="tooltip"
-	on:mouseover={mouseOver}
-	on:mouseleave={mouseLeave}
-	on:mousemove={mouseMove}
-	on:focus={focusIn}
-	on:focusout={focusOut}
->
+{#if disabled}
 	<slot />
-</div>
+{:else}
+	<div
+		role="tooltip"
+		on:mouseover={mouseOver}
+		on:mouseleave={mouseLeave}
+		on:mousemove={mouseMove}
+		on:focus={focusIn}
+		on:focusout={focusOut}
+	>
+		<slot />
+	</div>
 
-{#if isHovered}
-	<div style="top: {y}px; left: {x}px;" class="tooltip">{title}</div>
+	{#if isHovered}
+		<div style="top: {y}px; left: {x}px;" class="tooltip">{title}</div>
+	{/if}
 {/if}
 
 <style lang="postcss">

@@ -11,6 +11,7 @@
 	export let selected = false;
 	export let noItems = false;
 	export let noClick = false;
+	export let noTooltip = false;
 
 	function onClick() {
 		if (!noClick) {
@@ -25,30 +26,34 @@
 	}
 </script>
 
-<Tooltip title={`${champion.name} - ${champion.cost}g`}>
+<Tooltip title={`${champion.name} - ${champion.cost}g`} disabled={noTooltip}>
+	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<div
-		class={`champion-avatar c${champion.cost}`}
+		class="champion-avatar"
 		class:noClick
 		class:selected
 		on:click={onClick}
 		on:keydown={onKeyDown}
-		role="button"
-		tabindex={noClick ? -1 : 0}
+		role={noClick ? undefined : 'button'}
+		tabindex={noClick ? undefined : 0}
 	>
 		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
-		<img
-			class="avatar-image"
-			src={champion.image}
-			alt={champion.name}
-			title={champion.name}
-			loading="lazy"
-		/>
+
+		<div class={`hexagon c${champion.cost}`}>
+			<div class="hexagon inner" style="background-image: url({champion.image})" />
+		</div>
+
+		{#if noTooltip}
+			<div class="champion-name">{champion.name}</div>
+		{/if}
 
 		{#if !noItems && champion.items}
 			<div class="item-images">
 				{#each champion.items as item}
-					<img src={item.image} alt={item.name} loading="lazy" />
+					<div class="hexagon bg-slate-700">
+						<div class="item hexagon inner" style="background-image: url({item.image})" />
+					</div>
 				{/each}
 			</div>
 		{/if}
@@ -58,45 +63,40 @@
 <style lang="postcss">
 	.champion-avatar {
 		position: relative;
-		border-width: 3px;
-		border-style: solid;
-		border-radius: 3px;
-		aspect-ratio: 1 / 1;
 	}
 
-	.champion-avatar:not(.noClick) {
-		cursor: pointer;
+	.hexagon {
+		@apply flex aspect-square;
+		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
 	}
 
-	.avatar-image {
-		display: block;
-		width: 100%;
-		border-radius: 1px;
+	.hexagon.inner {
+		@apply m-auto w-4/5 h-4/5 bg-cover object-cover bg-slate-900;
+	}
+
+	.champion-name {
+		@apply text-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold;
+		text-shadow: 0px 0px 2px black;
 	}
 
 	.item-images {
 		position: absolute;
-		bottom: -8px;
-		left: -6px;
-		width: calc(100% + 12px);
+		bottom: -6px;
+		left: -2px;
+		width: calc(100% + 4px);
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1px;
 	}
 
-	.item-images img {
-		width: 100%;
-		border-width: 1px;
-		border-style: solid;
-		border-radius: 2px;
-		border-color: #666;
+	.item-images .item {
+		@apply aspect-square bg-cover;
 	}
 
 	.close-icon,
 	.selected-icon {
 		position: absolute;
-		top: -4px;
-		right: -4px;
+		top: 2%;
+		right: 8%;
 		border-radius: 100%;
 		z-index: 10;
 	}
@@ -114,35 +114,35 @@
 		@apply text-green-600 bg-gray-800;
 	}
 
-	.champion-avatar.c1 {
-		border-color: #213042;
+	.c1 {
+		background-color: #213042;
 	}
 
-	.champion-avatar.c2 {
-		border-color: #156831;
+	.c2 {
+		background-color: #156831;
 	}
 
-	.champion-avatar.c3 {
-		border-color: #12407c;
+	.c3 {
+		background-color: #12407c;
 	}
 
-	.champion-avatar.c4 {
-		border-color: #893088;
+	.c4 {
+		background-color: #893088;
 	}
 
-	.champion-avatar.c5 {
-		border-color: #b89d27;
+	.c5 {
+		background-color: #b89d27;
 	}
 
-	.champion-avatar.c6 {
-		border-color: #bbbbbb;
+	.c6 {
+		background-color: #bbbbbb;
 	}
 
-	.champion-avatar.c7 {
-		border-color: #ffffff;
+	.c7 {
+		background-color: #ffffff;
 	}
 
-	.champion-avatar.c8 {
-		border-color: #eab8ff;
+	.c8 {
+		background-color: #eab8ff;
 	}
 </style>

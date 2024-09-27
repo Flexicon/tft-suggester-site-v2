@@ -8,13 +8,15 @@
 	const dispatch = createEventDispatcher();
 
 	export let comp: Comp;
-	export let selectedNames: string[];
-	export let cheatsheetItems: Item[];
+	export let selectedNames: string[] = [];
+	export let cheatsheetItems: Item[] = [];
+	export let selectable = true;
 
 	let isCheatsheetOpen = false;
 
 	$: compChampNames = comp.champions.map((c) => c.name);
 	$: selectedInComp = selectedNames.filter((name) => compChampNames.includes(name));
+	$: noCheatsheet = cheatsheetItems.length === 0;
 
 	function toggleCheatsheet() {
 		isCheatsheetOpen = !isCheatsheetOpen;
@@ -37,16 +39,20 @@
 <div class="comps-list-item">
 	<div class="title">
 		<span class={`tier tier-${comp.tier.toLowerCase()}`}>{comp.tier}</span>
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<div
 			class="name-and-playstyle"
-			on:click={toggleCheatsheet}
-			on:keydown={toggleCheatsheetKeydown}
-			role="button"
-			tabindex="0"
+			class:noCheatsheet
+			on:click={noCheatsheet ? undefined : toggleCheatsheet}
+			on:keydown={noCheatsheet ? undefined : toggleCheatsheetKeydown}
+			role={noCheatsheet ? undefined : 'button'}
+			tabindex={noCheatsheet ? undefined : 0}
 		>
 			<div class="name">
 				<span>{comp.name}</span>
-				<Icon class="text-2xl" icon={isCheatsheetOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+				{#if !noCheatsheet}
+					<Icon class="text-2xl" icon={isCheatsheetOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+				{/if}
 			</div>
 			<div class="playstyle">{comp.playstyle}</div>
 		</div>
@@ -58,11 +64,13 @@
 				{champion}
 				selected={selectedInComp.includes(champion.name)}
 				on:click={() => onChampionClick(champion)}
+				noClick={!selectable}
+				noTooltip
 			/>
 		{/each}
 	</div>
 
-	{#if isCheatsheetOpen}
+	{#if isCheatsheetOpen && cheatsheetItems.length}
 		<ItemCheatsheet {comp} {cheatsheetItems} />
 	{/if}
 </div>
@@ -70,14 +78,14 @@
 <style lang="postcss">
 	.comps-list-item {
 		@apply grid grid-cols-1 py-3 px-5 mb-4 text-white bg-stone-600 rounded shadow-md shadow-stone-500/70;
-		@apply md:grid-cols-[40%60%] lg:grid-cols-[50%auto];
+		@apply md:grid-cols-[40%60%] lg:grid-cols-[35%65%] xl:grid-cols-[40%auto];
 	}
 
 	.title {
 		@apply flex justify-start items-center mb-3 md:mb-0;
 	}
 
-	.name-and-playstyle {
+	.name-and-playstyle:not(.noCheatsheet) {
 		@apply cursor-pointer hover:text-gray-300;
 	}
 
@@ -110,6 +118,6 @@
 	}
 
 	.champions {
-		@apply grid gap-2 grid-cols-4 sm:grid-cols-8;
+		@apply grid gap-1 grid-cols-4 sm:grid-cols-8;
 	}
 </style>
