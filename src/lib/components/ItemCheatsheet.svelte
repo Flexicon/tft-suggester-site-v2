@@ -65,5 +65,6 @@
 <style lang="postcss">
 	.composite-item {
 		@apply block w-12 border-2 rounded-sm border-gray-500;
+		filter: drop-shadow(1px 5px 3px rgba(50, 50, 0, 0.5));
 	}
 </style>

@@ -63,6 +63,7 @@
 <style lang="postcss">
 	.champion-avatar {
 		position: relative;
+		filter: drop-shadow(1px 5px 3px rgba(50, 50, 0, 0.5));
 	}
 
 	.hexagon {
