@@ -1,4 +1,4 @@
-import type { Comp } from '$lib/types';
+import { Tiers, type Comp } from '$lib/types';
 
 const countMatchesInComp = (comp: Comp, selectedNames: string[]): number =>
 	comp.champions.filter((c) => selectedNames.includes(c.name)).length;
@@ -8,16 +8,18 @@ export const compSortFn = (selectedNames: string[]) => (a: Comp, b: Comp) => {
 	const bCount = countMatchesInComp(b, selectedNames);
 
 	if (aCount !== bCount) {
-		return aCount > bCount ? -1 : 1;
+		return bCount - aCount;
 	}
 
-	if (a.tier === b.tier) {
-		return a.name < b.name ? -1 : 1;
-	} else if (a.tier === 'S') {
-		return -1;
-	} else if (b.tier === 'S') {
-		return 1;
+	const aTierIndex = Tiers.indexOf(a.tier);
+	const bTierIndex = Tiers.indexOf(b.tier);
+
+	if (aTierIndex !== bTierIndex) {
+		return aTierIndex - bTierIndex;
 	}
+
+	return a.name.localeCompare(b.name);
+};
 	return a.tier < b.tier ? -1 : 1;
 };
 
