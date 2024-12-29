@@ -12,7 +12,7 @@
 
 	export let data: PageData;
 
-	const { comps, champions, items } = data;
+	const { comps, playstyles, champions, items } = data;
 
 	const topLimit = 5;
 	let showTop = false;
@@ -40,7 +40,7 @@
 	}
 </script>
 
-<ChampionSelector {champions} {selected} on:select={onChampSelected} />
+<ChampionSelector {champions} {selected} hideGrid={showTop} on:select={onChampSelected} />
 
 <ChampionsSelected champions={selected} on:deselect={onChampDeselected} />
 
@@ -55,6 +55,7 @@
 {#if selected.length || showTop}
 	<CompsList
 		{comps}
+		{playstyles}
 		{selected}
 		cheatsheetItems={items}
 		{topLimit}

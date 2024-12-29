@@ -55,6 +55,18 @@ describe('data:comps:compFilterFn', () => {
 		);
 		assert.deepEqual(compNames(result), namesByIndex(comps, [0, 1, 2]));
 	});
+
+	it('should filter to match given list ["Galio", "Foo", "Lissandra", "Taric"] and "Fast 8" playstyle', () => {
+		const result = comps.filter(
+			compFilterFn({ selectedNames: ['Galio', 'Foo', 'Lissandra', 'Taric'], playstyle: 'Fast 8' }),
+		);
+		assert.deepEqual(compNames(result), namesByIndex(comps, [1]));
+	});
+
+	it('should filter to match given "Fast 8" playstyle', () => {
+		const result = comps.filter(compFilterFn({ playstyle: 'Fast 8' }));
+		assert.deepEqual(compNames(result), namesByIndex(comps, [1, 3, 4]));
+	});
 });
 
 function compNames(comps: Comp[]): string[] {

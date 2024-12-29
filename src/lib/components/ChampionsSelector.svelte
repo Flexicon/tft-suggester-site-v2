@@ -8,6 +8,7 @@
 
 	export let champions: Champion[];
 	export let selected: Champion[];
+	export let hideGrid = false;
 
 	let query = '';
 
@@ -24,7 +25,7 @@
 		dispatch('select', champ);
 	}
 
-	$: showGrid = selected.length === 0 || query;
+	$: showGrid = (selected.length === 0 && !hideGrid) || query;
 	$: placeholder = selected.length ? 'Add a champion...' : 'Pick a champion...';
 	$: selectedNames = selected.map((c) => c.name);
 	$: filteredChampions = filterChampions(champions, selectedNames, query.toLowerCase());
