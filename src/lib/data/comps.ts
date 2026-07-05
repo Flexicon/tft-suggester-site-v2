@@ -1,6 +1,10 @@
 import { Tiers, type Comp } from '$lib/types';
 
-const countMatchesInComp = (comp: Comp, selectedNames: string[], selectedSet?: Set<string>): number => {
+const countMatchesInComp = (
+	comp: Comp,
+	selectedNames: string[],
+	selectedSet?: Set<string>,
+): number => {
 	if (!selectedNames.length) return 0;
 
 	const names = selectedSet ?? new Set(selectedNames);

@@ -48,11 +48,11 @@
 		cancelPendingFrame();
 	}
 
-	function focusIn(_: FocusEvent) {
+	function focusIn() {
 		isHovered = true;
 	}
 
-	function focusOut(_: FocusEvent) {
+	function focusOut() {
 		isHovered = false;
 	}
 

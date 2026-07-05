@@ -9,7 +9,7 @@
 </script>
 
 <div class="champions-selected">
-	{#each champions as champion}
+	{#each champions as champion (champion.name)}
 		<ChampionAvatar {champion} cancellable on:click={() => dispatch('deselect', champion)} />
 	{/each}
 </div>

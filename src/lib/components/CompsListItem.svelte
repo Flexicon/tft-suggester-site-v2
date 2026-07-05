@@ -14,8 +14,7 @@
 
 	let isCheatsheetOpen = false;
 
-	$: compChampNames = comp.champions.map((c) => c.name);
-	$: selectedInComp = selectedNames.filter((name) => compChampNames.includes(name));
+	$: selectedSet = new Set(selectedNames);
 	$: noCheatsheet = cheatsheetItems.length === 0;
 
 	function toggleCheatsheet() {
@@ -29,10 +28,7 @@
 	}
 
 	function onChampionClick(champion: Champion) {
-		dispatch(
-			selectedInComp.includes(champion.name) ? 'deselect-champion' : 'select-champion',
-			champion,
-		);
+		dispatch(selectedSet.has(champion.name) ? 'deselect-champion' : 'select-champion', champion);
 	}
 </script>
 
@@ -59,10 +55,10 @@
 	</div>
 
 	<div class="champions">
-		{#each comp.champions as champion}
+		{#each comp.champions as champion (champion.name)}
 			<ChampionAvatar
 				{champion}
-				selected={selectedInComp.includes(champion.name)}
+				selected={selectedSet.has(champion.name)}
 				on:click={() => onChampionClick(champion)}
 				noClick={!selectable}
 				compact
