@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { compFilterFn, compSortFn } from '$lib/data/comps';
+	import { buildCompListRows, filterAndSortCompRows } from '$lib/data/comps';
 	import type { Champion, Comp, Item } from '$lib/types';
 	import CompsListItem from './CompsListItem.svelte';
 	import Select from './Select.svelte';
@@ -16,10 +16,10 @@
 	let playstyleFilter = '';
 
 	$: selectedNames = selected.map((c) => c.name);
-	$: sortedComps = comps.sort(compSortFn(selectedNames));
-	$: filteredComps = selected.length
-		? sortedComps.filter(compFilterFn({ selectedNames, playstyle: playstyleFilter }))
-		: sortedComps.filter(compFilterFn({ playstyle: playstyleFilter })).slice(0, topLimit);
+	$: compRows = buildCompListRows(comps, selectedNames);
+	$: filteredRows = selected.length
+		? filterAndSortCompRows(compRows, { selectedNames, playstyle: playstyleFilter })
+		: filterAndSortCompRows(compRows, { playstyle: playstyleFilter }).slice(0, topLimit);
 
 	function selectChampion({ detail: champion }: CustomEvent<Champion>) {
 		dispatch('select-champion', champion);
@@ -41,9 +41,9 @@
 		/>
 	{/if}
 
-	{#each filteredComps as comp (`${comp.name}-${comp.tier}-${comp.playstyle}`)}
+	{#each filteredRows as row (row.key)}
 		<CompsListItem
-			{comp}
+			comp={row.comp}
 			{selectedNames}
 			{cheatsheetItems}
 			on:select-champion={selectChampion}
