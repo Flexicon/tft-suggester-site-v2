@@ -6,6 +6,7 @@
 	import Select from './Select.svelte';
 
 	const dispatch = createEventDispatcher();
+	const resultBatchSize = 15;
 
 	export let comps: Comp[];
 	export let playstyles: string[];
@@ -14,12 +15,27 @@
 	export let topLimit: number;
 
 	let playstyleFilter = '';
+	let visibleLimit = topLimit;
 
 	$: selectedNames = selected.map((c) => c.name);
+	$: selectedKey = selectedNames.join('|');
 	$: compRows = buildCompListRows(comps, selectedNames);
 	$: filteredRows = selected.length
 		? filterAndSortCompRows(compRows, { selectedNames, playstyle: playstyleFilter })
 		: filterAndSortCompRows(compRows, { playstyle: playstyleFilter }).slice(0, topLimit);
+	$: {
+		selectedKey;
+		playstyleFilter;
+		visibleLimit = selected.length ? resultBatchSize : topLimit;
+	}
+	$: visibleRows = filteredRows.slice(0, visibleLimit);
+	$: hasMoreRows = selected.length > 0 && visibleRows.length < filteredRows.length;
+	$: showingCount = visibleRows.length;
+	$: totalCount = filteredRows.length;
+
+	function showMore() {
+		visibleLimit += resultBatchSize;
+	}
 
 	function selectChampion({ detail: champion }: CustomEvent<Champion>) {
 		dispatch('select-champion', champion);
@@ -41,7 +57,11 @@
 		/>
 	{/if}
 
-	{#each filteredRows as row (row.key)}
+	{#if selected.length && totalCount}
+		<p class="results-summary">Showing {showingCount} of {totalCount} matching comps</p>
+	{/if}
+
+	{#each visibleRows as row (row.key)}
 		<CompsListItem
 			comp={row.comp}
 			{selectedNames}
@@ -50,4 +70,14 @@
 			on:deselect-champion={deselectChampion}
 		/>
 	{/each}
+
+	{#if hasMoreRows}
+		<button class="button mx-auto block" on:click={showMore}>Show more</button>
+	{/if}
 </div>
+
+<style lang="postcss">
+	.results-summary {
+		@apply mb-4 text-sm text-zinc-400;
+	}
+</style>
