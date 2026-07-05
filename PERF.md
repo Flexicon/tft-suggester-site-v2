@@ -255,3 +255,14 @@ Done when:
   and rendered 105 comp-list champion avatars.
 - The baseline confirms the first fixes should prioritize duplicate URL navigation work,
   repeated sort/filter scripting, and dense comp-list rendering/paint cost.
+
+### Phase 7 Re-Measure
+
+- Local Playwright smoke-tested the optimized app at `http://127.0.0.1:5173/`.
+- Selecting the first champion stayed on `/`, confirming selection no longer triggers SvelteKit URL
+  navigation work.
+- The same selection rendered 13 matching comp cards and 105 comp-list avatars, all using compact
+  lazy/async `<img>` elements.
+- This path is below the 15-result batch limit, so it does not need virtualization. If future data
+  pushes common selections above the batch size and traces still show long tasks, list virtualization
+  is the next larger change to consider.
