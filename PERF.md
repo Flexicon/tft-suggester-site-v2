@@ -244,3 +244,14 @@ Done when:
 4. Phase 4: simplify dense comp-list avatars.
 5. Phase 5 and Phase 6: polish tooltip and repeated-list cleanup.
 6. Phase 7: re-measure and decide whether virtualization is needed.
+
+## Implementation Notes
+
+### Phase 0 Baseline
+
+- Local Playwright loaded the app at `http://127.0.0.1:5173/`.
+- Initial render showed 63 champion picker avatars and no comp cards.
+- Selecting the first champion changed the URL to `/?selected=Aatrox`, rendered 13 comp cards,
+  and rendered 105 comp-list champion avatars.
+- The baseline confirms the first fixes should prioritize duplicate URL navigation work,
+  repeated sort/filter scripting, and dense comp-list rendering/paint cost.
