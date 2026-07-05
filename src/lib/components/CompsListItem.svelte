@@ -65,7 +65,7 @@
 				selected={selectedInComp.includes(champion.name)}
 				on:click={() => onChampionClick(champion)}
 				noClick={!selectable}
-				noTooltip
+				compact
 			/>
 		{/each}
 	</div>
