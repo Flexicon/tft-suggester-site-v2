@@ -80,6 +80,19 @@ describe('data:comps:filterAndSortCompRows', () => {
 		assert.deepEqual(compNames(result.map((row) => row.comp)), namesByIndex(comps, [1]));
 		assert.deepEqual(compNames(comps), originalNames);
 	});
+
+	it('should keep rows when selected list is omitted or empty', () => {
+		const rows = buildCompListRows(comps, []);
+
+		assert.deepEqual(
+			compNames(filterAndSortCompRows(rows, {}).map((row) => row.comp)),
+			namesByIndex(comps, [2, 0, 4, 1, 3]),
+		);
+		assert.deepEqual(
+			compNames(filterAndSortCompRows(rows, { selectedNames: [] }).map((row) => row.comp)),
+			namesByIndex(comps, [2, 0, 4, 1, 3]),
+		);
+	});
 });
 
 function compNames(comps: Comp[]): string[] {

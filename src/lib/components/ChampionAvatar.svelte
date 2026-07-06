@@ -21,7 +21,8 @@
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
-		if (!noClick && event.key === 'Enter') {
+		if (!noClick && (event.key === 'Enter' || event.key === ' ')) {
+			event.preventDefault();
 			onClick();
 		}
 	}
