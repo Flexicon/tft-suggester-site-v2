@@ -30,8 +30,7 @@
 	}
 	$: visibleRows = filteredRows.slice(0, visibleLimit);
 	$: hasMoreRows = selected.length > 0 && visibleRows.length < filteredRows.length;
-	$: showingCount = visibleRows.length;
-	$: totalCount = filteredRows.length;
+	$: hasNoSelectedMatches = selected.length > 0 && filteredRows.length === 0;
 
 	function showMore() {
 		visibleLimit += resultBatchSize;
@@ -57,8 +56,10 @@
 		/>
 	{/if}
 
-	{#if selected.length && totalCount}
-		<p class="results-summary">Showing {showingCount} of {totalCount} matching comps</p>
+	{#if hasNoSelectedMatches}
+		<p class="empty-results">
+			No comps include the selected champion{selected.length === 1 ? '' : 's'} right now.
+		</p>
 	{/if}
 
 	{#each visibleRows as row (row.key)}
@@ -77,7 +78,7 @@
 </div>
 
 <style lang="postcss">
-	.results-summary {
+	.empty-results {
 		@apply mb-4 text-sm text-zinc-400;
 	}
 </style>
