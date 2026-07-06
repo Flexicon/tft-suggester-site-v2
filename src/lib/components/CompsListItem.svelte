@@ -55,7 +55,7 @@
 	</div>
 
 	<div class="champions">
-		{#each comp.champions as champion (champion.name)}
+		{#each comp.champions as champion, index (`${champion.name}-${index}`)}
 			<ChampionAvatar
 				{champion}
 				selected={selectedSet.has(champion.name)}
