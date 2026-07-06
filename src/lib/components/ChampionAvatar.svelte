@@ -103,12 +103,13 @@
 	}
 
 	.compact-frame {
-		@apply flex aspect-square overflow-hidden shadow-sm shadow-black/40;
+		@apply flex aspect-square items-center justify-center overflow-hidden shadow-sm shadow-black/40;
 		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
 	}
 
 	.compact-frame img {
-		@apply h-full w-full object-cover;
+		@apply h-4/5 w-4/5 object-cover bg-slate-900;
+		clip-path: inherit;
 	}
 
 	.champion-avatar.compact.selected .compact-frame {
