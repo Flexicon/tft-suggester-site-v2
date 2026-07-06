@@ -6,7 +6,7 @@
 	import Select from './Select.svelte';
 
 	const dispatch = createEventDispatcher();
-	const resultBatchSize = 15;
+	const resultBatchSize = 5;
 
 	export let comps: Comp[];
 	export let playstyles: string[];
