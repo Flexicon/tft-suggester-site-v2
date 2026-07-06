@@ -47,6 +47,8 @@
 			<img src={champion.image} alt={champion.name} loading="lazy" decoding="async" />
 		</div>
 
+		<div class="champion-name">{champion.name}</div>
+
 		{#if !noItems && champion.items}
 			<div class="item-images">
 				{#each champion.items as item}
