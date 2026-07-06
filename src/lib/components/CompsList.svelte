@@ -58,7 +58,11 @@
 
 	{#if hasNoSelectedMatches}
 		<p class="empty-results">
-			No comps include the selected champion{selected.length === 1 ? '' : 's'} right now.
+			{#if playstyleFilter}
+				No comps match the selected champion{selected.length === 1 ? '' : 's'} and playstyle filter.
+			{:else}
+				No comps include the selected champion{selected.length === 1 ? '' : 's'} right now.
+			{/if}
 		</p>
 	{/if}
 
