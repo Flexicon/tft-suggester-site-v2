@@ -10,7 +10,12 @@
 
 <div class="champions-selected">
 	{#each champions as champion (champion.name)}
-		<ChampionAvatar {champion} cancellable on:click={() => dispatch('deselect', champion)} />
+		<ChampionAvatar
+			{champion}
+			cancellable
+			noItems
+			on:click={() => dispatch('deselect', champion)}
+		/>
 	{/each}
 </div>
 

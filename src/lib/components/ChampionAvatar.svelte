@@ -46,6 +46,16 @@
 		<div class={`compact-frame c${champion.cost}`}>
 			<img src={champion.image} alt={champion.name} loading="lazy" decoding="async" />
 		</div>
+
+		{#if !noItems && champion.items}
+			<div class="item-images">
+				{#each champion.items as item}
+					<div class="hexagon bg-slate-700">
+						<div class="item hexagon inner" style="background-image: url({item.image})" />
+					</div>
+				{/each}
+			</div>
+		{/if}
 	</div>
 {:else}
 	<Tooltip title={`${champion.name} - ${champion.cost}g`} disabled={noTooltip}>
