@@ -30,7 +30,7 @@
 	{#each championsWithItems as champion}
 		<div class="flex gap-4 mb-5">
 			<div class="w-12">
-				<ChampionAvatar {champion} noItems noClick />
+				<ChampionAvatar {champion} noItems noClick noTooltip />
 			</div>
 
 			<div>

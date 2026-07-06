@@ -12,7 +12,6 @@
 	export let noItems = false;
 	export let noClick = false;
 	export let noTooltip = false;
-	export let compact = false;
 
 	function onClick() {
 		if (!noClick) {
@@ -28,11 +27,10 @@
 	}
 </script>
 
-{#if compact}
+<Tooltip title={`${champion.name} - ${champion.cost}g`} disabled={noTooltip}>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<div
 		class="champion-avatar"
-		class:compact
 		class:noClick
 		class:selected
 		on:click={onClick}
@@ -41,13 +39,16 @@
 		tabindex={noClick ? undefined : 0}
 		aria-label={noClick ? undefined : `${selected ? 'Deselect' : 'Select'} ${champion.name}`}
 	>
+		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
 
-		<div class={`compact-frame c${champion.cost}`}>
+		<div class={`avatar-frame c${champion.cost}`}>
 			<img src={champion.image} alt={champion.name} loading="lazy" decoding="async" />
 		</div>
 
-		<div class="champion-name">{champion.name}</div>
+		{#if noTooltip}
+			<div class="champion-name">{champion.name}</div>
+		{/if}
 
 		{#if !noItems && champion.items}
 			<div class="item-images">
@@ -59,62 +60,24 @@
 			</div>
 		{/if}
 	</div>
-{:else}
-	<Tooltip title={`${champion.name} - ${champion.cost}g`} disabled={noTooltip}>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<div
-			class="champion-avatar"
-			class:noClick
-			class:selected
-			on:click={onClick}
-			on:keydown={onKeyDown}
-			role={noClick ? undefined : 'button'}
-			tabindex={noClick ? undefined : 0}
-		>
-			{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
-			{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
-
-			<div class={`hexagon c${champion.cost}`}>
-				<div class="hexagon inner" style="background-image: url({champion.image})" />
-			</div>
-
-			{#if noTooltip}
-				<div class="champion-name">{champion.name}</div>
-			{/if}
-
-			{#if !noItems && champion.items}
-				<div class="item-images">
-					{#each champion.items as item}
-						<div class="hexagon bg-slate-700">
-							<div class="item hexagon inner" style="background-image: url({item.image})" />
-						</div>
-					{/each}
-				</div>
-			{/if}
-		</div>
-	</Tooltip>
-{/if}
+</Tooltip>
 
 <style lang="postcss">
 	.champion-avatar {
 		position: relative;
 	}
 
-	.champion-avatar:not(.compact) {
-		filter: drop-shadow(1px 5px 3px rgba(50, 50, 0, 0.5));
-	}
-
-	.compact-frame {
+	.avatar-frame {
 		@apply flex aspect-square items-center justify-center overflow-hidden shadow-sm shadow-black/40;
 		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
 	}
 
-	.compact-frame img {
+	.avatar-frame img {
 		@apply h-4/5 w-4/5 object-cover bg-slate-900;
 		clip-path: inherit;
 	}
 
-	.champion-avatar.compact.selected .compact-frame {
+	.champion-avatar.selected .avatar-frame {
 		@apply ring-2 ring-green-500 ring-offset-2 ring-offset-stone-600;
 	}
 

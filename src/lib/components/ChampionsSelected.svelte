@@ -14,6 +14,7 @@
 			{champion}
 			cancellable
 			noItems
+			noTooltip
 			on:click={() => dispatch('deselect', champion)}
 		/>
 	{/each}

@@ -61,7 +61,7 @@
 				selected={selectedSet.has(champion.name)}
 				on:click={() => onChampionClick(champion)}
 				noClick={!selectable}
-				compact
+				noTooltip
 			/>
 		{/each}
 	</div>
