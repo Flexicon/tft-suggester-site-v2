@@ -65,17 +65,6 @@
 <style lang="postcss">
 	.champion-avatar {
 		position: relative;
-		isolation: isolate;
-	}
-
-	.champion-avatar::before {
-		content: '';
-		position: absolute;
-		inset: 2px;
-		z-index: -1;
-		background: rgb(0 0 0 / 0.22);
-		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-		transform: translate(1px, 3px);
 	}
 
 	.avatar-frame {
