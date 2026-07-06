@@ -21,7 +21,8 @@
 - Use tabs, single quotes, trailing commas, and 100-column Prettier formatting.
 - Prefer existing Svelte component patterns and Tailwind classes over adding new abstractions.
 - Be careful with server-only code: `src/lib/server/data.ts` and `+*.server.ts` can use server APIs; client components cannot.
-- Selected champions are encoded in the `selected` query param on the home page.
+- Selected champions are local page state; the home page intentionally does not persist selection in
+  the URL.
 - The build footer reads `git rev-parse HEAD` in `src/routes/+layout.server.ts`, so builds expect a git checkout.
 
 ## Commands

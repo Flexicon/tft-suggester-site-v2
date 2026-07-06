@@ -263,6 +263,8 @@ Done when:
   navigation work.
 - The same selection rendered 13 matching comp cards and 105 comp-list avatars, all using compact
   lazy/async `<img>` elements.
+- Shareable selected-champion URLs were removed entirely after reviewing usage, so selection state is
+  now local only instead of initialized from or written to `?selected=`.
 - This path is below the 15-result batch limit, so it does not need virtualization. If future data
   pushes common selections above the batch size and traces still show long tasks, list virtualization
   is the next larger change to consider.

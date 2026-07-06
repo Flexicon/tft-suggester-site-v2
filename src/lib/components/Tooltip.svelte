@@ -36,7 +36,8 @@
 
 	function mouseOver(event: MouseEvent) {
 		isHovered = true;
-		updatePosition(event);
+		x = event.pageX + xOffset;
+		y = event.pageY + yOffset;
 	}
 
 	function mouseMove(event: MouseEvent) {

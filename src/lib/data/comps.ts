@@ -13,23 +13,22 @@ const countMatchesInComp = (
 
 export type CompListRow = {
 	comp: Comp;
-	championNames: Set<string>;
 	tierIndex: number;
 	key: string;
 	matchCount: number;
 };
 
 export const buildCompListRows = (comps: Comp[], selectedNames: string[] = []): CompListRow[] => {
+	const selectedSet = new Set(selectedNames);
+
 	return comps.map((comp) => {
-		const championNames = new Set(comp.champions.map((c) => c.name));
-		const matchCount = selectedNames.reduce(
-			(count, name) => (championNames.has(name) ? count + 1 : count),
+		const matchCount = comp.champions.reduce(
+			(count, champion) => (selectedSet.has(champion.name) ? count + 1 : count),
 			0,
 		);
 
 		return {
 			comp,
-			championNames,
 			tierIndex: Tiers.indexOf(comp.tier),
 			key: `${comp.name}-${comp.tier}-${comp.playstyle}`,
 			matchCount,
