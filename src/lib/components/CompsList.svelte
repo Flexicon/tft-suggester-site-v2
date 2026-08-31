@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { compFilterFn, compSortFn } from '$lib/data/comps';
+	import { buildCompListRows, filterAndSortCompRows } from '$lib/data/comps';
 	import type { Champion, Comp, Item } from '$lib/types';
 	import CompsListItem from './CompsListItem.svelte';
 	import Select from './Select.svelte';
 
 	const dispatch = createEventDispatcher();
+	const resultBatchSize = 5;
 
 	export let comps: Comp[];
 	export let playstyles: string[];
@@ -14,12 +15,37 @@
 	export let topLimit: number;
 
 	let playstyleFilter = '';
+	let visibleLimit = topLimit;
+	let lastSelectedKey = '';
+	let lastPlaystyleFilter = '';
+	let lastTopLimit = topLimit;
 
 	$: selectedNames = selected.map((c) => c.name);
-	$: sortedComps = comps.sort(compSortFn(selectedNames));
-	$: filteredComps = selected.length
-		? sortedComps.filter(compFilterFn({ selectedNames, playstyle: playstyleFilter }))
-		: sortedComps.filter(compFilterFn({ playstyle: playstyleFilter })).slice(0, topLimit);
+	$: compRows = buildCompListRows(comps, selectedNames);
+	$: filteredRows = selected.length
+		? filterAndSortCompRows(compRows, { selectedNames, playstyle: playstyleFilter })
+		: filterAndSortCompRows(compRows, { playstyle: playstyleFilter }).slice(0, topLimit);
+	$: {
+		const selectedKey = selectedNames.join('|');
+		const shouldResetVisibleLimit =
+			selectedKey !== lastSelectedKey ||
+			playstyleFilter !== lastPlaystyleFilter ||
+			topLimit !== lastTopLimit;
+
+		if (shouldResetVisibleLimit) {
+			visibleLimit = selected.length ? resultBatchSize : topLimit;
+			lastSelectedKey = selectedKey;
+			lastPlaystyleFilter = playstyleFilter;
+			lastTopLimit = topLimit;
+		}
+	}
+	$: visibleRows = filteredRows.slice(0, visibleLimit);
+	$: hasMoreRows = selected.length > 0 && visibleRows.length < filteredRows.length;
+	$: hasNoSelectedMatches = selected.length > 0 && filteredRows.length === 0;
+
+	function showMore() {
+		visibleLimit += resultBatchSize;
+	}
 
 	function selectChampion({ detail: champion }: CustomEvent<Champion>) {
 		dispatch('select-champion', champion);
@@ -41,13 +67,33 @@
 		/>
 	{/if}
 
-	{#each filteredComps as comp (`${comp.name}-${comp.tier}-${comp.playstyle}`)}
+	{#if hasNoSelectedMatches}
+		<p class="empty-results">
+			{#if playstyleFilter}
+				No comps match the selected champion{selected.length === 1 ? '' : 's'} and playstyle filter.
+			{:else}
+				No comps include the selected champion{selected.length === 1 ? '' : 's'} right now.
+			{/if}
+		</p>
+	{/if}
+
+	{#each visibleRows as row (row.key)}
 		<CompsListItem
-			{comp}
+			comp={row.comp}
 			{selectedNames}
 			{cheatsheetItems}
 			on:select-champion={selectChampion}
 			on:deselect-champion={deselectChampion}
 		/>
 	{/each}
+
+	{#if hasMoreRows}
+		<button class="button mx-auto block" on:click={showMore}>Show more</button>
+	{/if}
 </div>
+
+<style lang="postcss">
+	.empty-results {
+		@apply mb-4 text-sm text-zinc-400;
+	}
+</style>

@@ -1,6 +1,6 @@
 import type { Comp } from '$lib/types';
 import { assert, describe, it } from 'vitest';
-import { compFilterFn, compSortFn } from './comps';
+import { buildCompListRows, compFilterFn, compSortFn, filterAndSortCompRows } from './comps';
 
 describe('data:comps:compSortFn', () => {
 	const comps: Comp[] = buildSampleComps();
@@ -66,6 +66,32 @@ describe('data:comps:compFilterFn', () => {
 	it('should filter to match given "Fast 8" playstyle', () => {
 		const result = comps.filter(compFilterFn({ playstyle: 'Fast 8' }));
 		assert.deepEqual(compNames(result), namesByIndex(comps, [1, 3, 4]));
+	});
+});
+
+describe('data:comps:filterAndSortCompRows', () => {
+	const comps: Comp[] = buildSampleComps();
+
+	it('should sort and filter without mutating source comps', () => {
+		const originalNames = compNames(comps);
+		const rows = buildCompListRows(comps, ['Ashe', 'Akshan']);
+		const result = filterAndSortCompRows(rows, { selectedNames: ['Ashe', 'Akshan'] });
+
+		assert.deepEqual(compNames(result.map((row) => row.comp)), namesByIndex(comps, [1]));
+		assert.deepEqual(compNames(comps), originalNames);
+	});
+
+	it('should keep rows when selected list is omitted or empty', () => {
+		const rows = buildCompListRows(comps, []);
+
+		assert.deepEqual(
+			compNames(filterAndSortCompRows(rows, {}).map((row) => row.comp)),
+			namesByIndex(comps, [2, 0, 4, 1, 3]),
+		);
+		assert.deepEqual(
+			compNames(filterAndSortCompRows(rows, { selectedNames: [] }).map((row) => row.comp)),
+			namesByIndex(comps, [2, 0, 4, 1, 3]),
+		);
 	});
 });
 
