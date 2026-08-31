@@ -16,17 +16,28 @@
 
 	let playstyleFilter = '';
 	let visibleLimit = topLimit;
+	let lastSelectedKey = '';
+	let lastPlaystyleFilter = '';
+	let lastTopLimit = topLimit;
 
 	$: selectedNames = selected.map((c) => c.name);
-	$: selectedKey = selectedNames.join('|');
 	$: compRows = buildCompListRows(comps, selectedNames);
 	$: filteredRows = selected.length
 		? filterAndSortCompRows(compRows, { selectedNames, playstyle: playstyleFilter })
 		: filterAndSortCompRows(compRows, { playstyle: playstyleFilter }).slice(0, topLimit);
 	$: {
-		selectedKey;
-		playstyleFilter;
-		visibleLimit = selected.length ? resultBatchSize : topLimit;
+		const selectedKey = selectedNames.join('|');
+		const shouldResetVisibleLimit =
+			selectedKey !== lastSelectedKey ||
+			playstyleFilter !== lastPlaystyleFilter ||
+			topLimit !== lastTopLimit;
+
+		if (shouldResetVisibleLimit) {
+			visibleLimit = selected.length ? resultBatchSize : topLimit;
+			lastSelectedKey = selectedKey;
+			lastPlaystyleFilter = playstyleFilter;
+			lastTopLimit = topLimit;
+		}
 	}
 	$: visibleRows = filteredRows.slice(0, visibleLimit);
 	$: hasMoreRows = selected.length > 0 && visibleRows.length < filteredRows.length;

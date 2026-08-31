@@ -1,14 +1,13 @@
 import { Tiers, type Comp } from '$lib/types';
 
-const countMatchesInComp = (
-	comp: Comp,
-	selectedNames: string[],
-	selectedSet?: Set<string>,
-): number => {
-	if (!selectedNames.length) return 0;
+const tierIndexByName = new Map(Tiers.map((tier, index) => [tier, index]));
 
-	const names = selectedSet ?? new Set(selectedNames);
-	return comp.champions.reduce((count, c) => (names.has(c.name) ? count + 1 : count), 0);
+const getTierIndex = (tier: Comp['tier']) => tierIndexByName.get(tier) ?? Tiers.length;
+
+const countMatchesInComp = (comp: Comp, selectedSet: Set<string>): number => {
+	if (selectedSet.size === 0) return 0;
+
+	return comp.champions.reduce((count, c) => (selectedSet.has(c.name) ? count + 1 : count), 0);
 };
 
 export type CompListRow = {
@@ -22,14 +21,11 @@ export const buildCompListRows = (comps: Comp[], selectedNames: string[] = []): 
 	const selectedSet = new Set(selectedNames);
 
 	return comps.map((comp) => {
-		const matchCount = comp.champions.reduce(
-			(count, champion) => (selectedSet.has(champion.name) ? count + 1 : count),
-			0,
-		);
+		const matchCount = countMatchesInComp(comp, selectedSet);
 
 		return {
 			comp,
-			tierIndex: Tiers.indexOf(comp.tier),
+			tierIndex: getTierIndex(comp.tier),
 			key: `${comp.name}-${comp.tier}-${comp.playstyle}`,
 			matchCount,
 		};
@@ -72,14 +68,24 @@ export const filterAndSortCompRows = (
 export const compSortFn = (selectedNames: string[]) => {
 	const selectedSet = new Set(selectedNames);
 	const matchCounts = new WeakMap<Comp, number>();
+	const tierIndexes = new WeakMap<Comp, number>();
 
 	const getMatchCount = (comp: Comp) => {
 		const cached = matchCounts.get(comp);
 		if (cached !== undefined) return cached;
 
-		const count = countMatchesInComp(comp, selectedNames, selectedSet);
+		const count = countMatchesInComp(comp, selectedSet);
 		matchCounts.set(comp, count);
 		return count;
+	};
+
+	const getTier = (comp: Comp) => {
+		const cached = tierIndexes.get(comp);
+		if (cached !== undefined) return cached;
+
+		const tierIndex = getTierIndex(comp.tier);
+		tierIndexes.set(comp, tierIndex);
+		return tierIndex;
 	};
 
 	return (a: Comp, b: Comp) => {
@@ -90,8 +96,8 @@ export const compSortFn = (selectedNames: string[]) => {
 			return bCount - aCount;
 		}
 
-		const aTierIndex = Tiers.indexOf(a.tier);
-		const bTierIndex = Tiers.indexOf(b.tier);
+		const aTierIndex = getTier(a);
+		const bTierIndex = getTier(b);
 
 		if (aTierIndex !== bTierIndex) {
 			return aTierIndex - bTierIndex;
@@ -107,17 +113,21 @@ export type CompFilterOpts = {
 };
 
 export const compFilterFn =
-	({ selectedNames, playstyle }: CompFilterOpts) =>
-	(comp: Comp) => {
-		if (!selectedNames && !playstyle) return true;
+	({ selectedNames, playstyle }: CompFilterOpts) => {
+		const selectedSet = new Set(selectedNames ?? []);
+		const shouldFilterBySelection = selectedNames !== undefined;
 
-		if (selectedNames && countMatchesInComp(comp, selectedNames) === 0) {
-			return false;
-		}
+		return (comp: Comp) => {
+			if (!selectedNames && !playstyle) return true;
 
-		if (playstyle && comp.playstyle !== playstyle) {
-			return false;
-		}
+			if (shouldFilterBySelection && countMatchesInComp(comp, selectedSet) === 0) {
+				return false;
+			}
 
-		return true;
+			if (playstyle && comp.playstyle !== playstyle) {
+				return false;
+			}
+
+			return true;
+		};
 	};
