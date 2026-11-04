@@ -14,7 +14,7 @@
 
 <div class="champions-grid">
 	{#each champions as champion (champion.name)}
-		<ChampionAvatar {champion} on:click={() => selectChampion(champion)} />
+		<ChampionAvatar {champion} eager on:click={() => selectChampion(champion)} />
 	{/each}
 </div>
 

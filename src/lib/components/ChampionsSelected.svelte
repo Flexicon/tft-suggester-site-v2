@@ -13,6 +13,7 @@
 		<ChampionAvatar
 			{champion}
 			cancellable
+			eager
 			noItems
 			on:click={() => dispatch('deselect', champion)}
 		/>

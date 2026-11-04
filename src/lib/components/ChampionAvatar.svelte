@@ -9,6 +9,7 @@
 	export let champion: Champion;
 	export let cancellable = false;
 	export let selected = false;
+	export let eager = false;
 	export let noItems = false;
 	export let noClick = false;
 	export let noTooltip = false;
@@ -43,7 +44,12 @@
 		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
 
 		<div class={`avatar-frame c${champion.cost}`}>
-			<img src={champion.image} alt={champion.name} loading="lazy" decoding="async" />
+			<img
+				src={champion.image}
+				alt={champion.name}
+				loading={eager ? 'eager' : 'lazy'}
+				decoding="async"
+			/>
 		</div>
 
 		{#if noTooltip}
