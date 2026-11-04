@@ -38,10 +38,16 @@
 		on:keydown={onKeyDown}
 		role={noClick ? undefined : 'button'}
 		tabindex={noClick ? undefined : 0}
-		aria-label={noClick ? undefined : `${selected ? 'Deselect' : 'Select'} ${champion.name}`}
+		aria-label={noClick
+			? undefined
+			: `${selected || cancellable ? 'Deselect' : 'Select'} ${champion.name}`}
 	>
-		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
-		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
+		{#if cancellable}
+			<span class="close-icon" aria-hidden="true"><Icon icon="mdi:close-circle" /></span>
+		{/if}
+		{#if selected}
+			<span class="selected-icon" aria-hidden="true"><Icon icon="mdi:check-circle" /></span>
+		{/if}
 
 		<div class={`avatar-frame c${champion.cost}`}>
 			<img
@@ -82,10 +88,6 @@
 	.avatar-frame img {
 		@apply h-4/5 w-4/5 object-cover bg-slate-900;
 		clip-path: inherit;
-	}
-
-	.champion-avatar.selected .avatar-frame {
-		@apply ring-2 ring-green-500 ring-offset-2 ring-offset-stone-600;
 	}
 
 	.hexagon {
