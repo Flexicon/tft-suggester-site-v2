@@ -28,7 +28,7 @@
 ## Commands
 
 - Install: `npm install`
-- Dev server: `npm run dev`
+- Dev server: `npm run dev` (serves on `http://localhost:8387`)
 - Type/check: `npm run check`
 - Lint/format check: `npm run lint`
 - Tests: `npm test`
