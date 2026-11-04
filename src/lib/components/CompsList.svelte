@@ -6,7 +6,7 @@
 	import Select from './Select.svelte';
 
 	const dispatch = createEventDispatcher();
-	const resultBatchSize = 5;
+	const resultBatchSize = 10;
 
 	export let comps: Comp[];
 	export let playstyles: string[];
@@ -16,8 +16,7 @@
 
 	let playstyleFilter = '';
 	let visibleLimit = topLimit;
-	let lastSelectedKey = '';
-	let lastPlaystyleFilter = '';
+	let lastPlaystyleFilter = playstyleFilter;
 	let lastTopLimit = topLimit;
 
 	$: selectedNames = selected.map((c) => c.name);
@@ -26,17 +25,17 @@
 		? filterAndSortCompRows(compRows, { selectedNames, playstyle: playstyleFilter })
 		: filterAndSortCompRows(compRows, { playstyle: playstyleFilter }).slice(0, topLimit);
 	$: {
-		const selectedKey = selectedNames.join('|');
-		const shouldResetVisibleLimit =
-			selectedKey !== lastSelectedKey ||
-			playstyleFilter !== lastPlaystyleFilter ||
-			topLimit !== lastTopLimit;
+		// The visible window only resets when the filter changes, never when a champion
+		// is toggled, so expanding results survives selection changes inside the list.
+		const baseLimit = selected.length ? resultBatchSize : topLimit;
+		const filterChanged = playstyleFilter !== lastPlaystyleFilter || topLimit !== lastTopLimit;
 
-		if (shouldResetVisibleLimit) {
-			visibleLimit = selected.length ? resultBatchSize : topLimit;
-			lastSelectedKey = selectedKey;
+		if (filterChanged) {
+			visibleLimit = baseLimit;
 			lastPlaystyleFilter = playstyleFilter;
 			lastTopLimit = topLimit;
+		} else if (visibleLimit < baseLimit) {
+			visibleLimit = baseLimit;
 		}
 	}
 	$: visibleRows = filteredRows.slice(0, visibleLimit);
@@ -67,6 +66,12 @@
 		/>
 	{/if}
 
+	{#if selected.length && filteredRows.length}
+		<p class="result-count">
+			Showing {visibleRows.length} of {filteredRows.length} matching comps
+		</p>
+	{/if}
+
 	{#if hasNoSelectedMatches}
 		<p class="empty-results">
 			{#if playstyleFilter}
@@ -93,6 +98,10 @@
 </div>
 
 <style lang="postcss">
+	.result-count {
+		@apply mb-3 text-sm text-zinc-400;
+	}
+
 	.empty-results {
 		@apply mb-4 text-sm text-zinc-400;
 	}
