@@ -17,6 +17,11 @@ export type CompListRow = {
 	matchCount: number;
 };
 
+export type CompFilterOpts = {
+	selectedNames?: string[];
+	playstyle?: string;
+};
+
 export const buildCompListRows = (comps: Comp[], selectedNames: string[] = []): CompListRow[] => {
 	const selectedSet = new Set(selectedNames);
 
@@ -64,70 +69,3 @@ export const filterAndSortCompRows = (
 		})
 		.sort(compareCompRows);
 };
-
-export const compSortFn = (selectedNames: string[]) => {
-	const selectedSet = new Set(selectedNames);
-	const matchCounts = new WeakMap<Comp, number>();
-	const tierIndexes = new WeakMap<Comp, number>();
-
-	const getMatchCount = (comp: Comp) => {
-		const cached = matchCounts.get(comp);
-		if (cached !== undefined) return cached;
-
-		const count = countMatchesInComp(comp, selectedSet);
-		matchCounts.set(comp, count);
-		return count;
-	};
-
-	const getTier = (comp: Comp) => {
-		const cached = tierIndexes.get(comp);
-		if (cached !== undefined) return cached;
-
-		const tierIndex = getTierIndex(comp.tier);
-		tierIndexes.set(comp, tierIndex);
-		return tierIndex;
-	};
-
-	return (a: Comp, b: Comp) => {
-		const aCount = getMatchCount(a);
-		const bCount = getMatchCount(b);
-
-		if (aCount !== bCount) {
-			return bCount - aCount;
-		}
-
-		const aTierIndex = getTier(a);
-		const bTierIndex = getTier(b);
-
-		if (aTierIndex !== bTierIndex) {
-			return aTierIndex - bTierIndex;
-		}
-
-		return a.name.localeCompare(b.name);
-	};
-};
-
-export type CompFilterOpts = {
-	selectedNames?: string[];
-	playstyle?: string;
-};
-
-export const compFilterFn =
-	({ selectedNames, playstyle }: CompFilterOpts) => {
-		const selectedSet = new Set(selectedNames ?? []);
-		const shouldFilterBySelection = selectedNames !== undefined;
-
-		return (comp: Comp) => {
-			if (!selectedNames && !playstyle) return true;
-
-			if (shouldFilterBySelection && countMatchesInComp(comp, selectedSet) === 0) {
-				return false;
-			}
-
-			if (playstyle && comp.playstyle !== playstyle) {
-				return false;
-			}
-
-			return true;
-		};
-	};
