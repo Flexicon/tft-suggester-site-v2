@@ -21,10 +21,15 @@
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
-		if (!noClick && (event.key === 'Enter' || event.key === ' ')) {
-			event.preventDefault();
-			onClick();
-		}
+		if (noClick) return;
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+
+		event.preventDefault();
+
+		// Holding a key fires repeated keydown events; only activate once per press.
+		if (event.repeat) return;
+
+		onClick();
 	}
 </script>
 
