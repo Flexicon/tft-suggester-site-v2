@@ -12,7 +12,7 @@
 - Static output via `@sveltejs/adapter-static`; `src/routes/+layout.ts` sets `prerender = true`.
 - PWA support lives in `vite.config.ts` via `@vite-pwa/sveltekit`; image runtime caching is configured there.
 - Main page data is loaded in `src/routes/+page.server.ts` from `src/lib/server/data.ts`.
-- Data comes from `https://tft-suggester-api.nerfthis.xyz`; the frontend maps item recommendations onto comp champions before rendering.
+- Data comes from `https://tft-suggester-api.nerfthis.xyz`; item recommendations are mapped onto comp champions in `src/lib/server/data.ts` before the page data reaches the client.
 - Core comp sorting/filtering logic is in `src/lib/data/comps.ts`; tests are in `src/lib/data/comps.test.ts`.
 - Reusable UI components are under `src/lib/components/`; shared types are under `src/lib/types/`.
 
