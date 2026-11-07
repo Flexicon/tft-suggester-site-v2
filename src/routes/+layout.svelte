@@ -31,6 +31,7 @@
 </script>
 
 <svelte:head>
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html webManifestLink}
 	{#if $page.data.title}
 		<title>{$page.data.title} - {appName}</title>

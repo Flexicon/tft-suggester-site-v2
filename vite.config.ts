@@ -1,8 +1,25 @@
+import { execSync } from 'node:child_process';
+
 import { sveltekit } from '@sveltejs/kit/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { defineConfig } from 'vite';
 
+function getCommitSha(): string {
+	if (process.env.VITE_COMMIT_SHA) {
+		return process.env.VITE_COMMIT_SHA;
+	}
+
+	try {
+		return execSync('git rev-parse HEAD').toString().trim();
+	} catch {
+		return 'dev';
+	}
+}
+
 export default defineConfig({
+	define: {
+		__COMMIT_SHA__: JSON.stringify(getCommitSha()),
+	},
 	plugins: [
 		sveltekit(),
 		SvelteKitPWA({
