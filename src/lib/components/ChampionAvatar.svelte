@@ -9,6 +9,7 @@
 	export let champion: Champion;
 	export let cancellable = false;
 	export let selected = false;
+	export let eager = false;
 	export let noItems = false;
 	export let noClick = false;
 	export let noTooltip = false;
@@ -20,9 +21,15 @@
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
-		if (!noClick && event.key === 'Enter') {
-			onClick();
-		}
+		if (noClick) return;
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+
+		event.preventDefault();
+
+		// Holding a key fires repeated keydown events; only activate once per press.
+		if (event.repeat) return;
+
+		onClick();
 	}
 </script>
 
@@ -36,12 +43,24 @@
 		on:keydown={onKeyDown}
 		role={noClick ? undefined : 'button'}
 		tabindex={noClick ? undefined : 0}
+		aria-label={noClick
+			? undefined
+			: `${selected || cancellable ? 'Deselect' : 'Select'} ${champion.name}`}
 	>
-		{#if cancellable}<span class="close-icon"><Icon icon="mdi:close-circle" /></span>{/if}
-		{#if selected}<span class="selected-icon"><Icon icon="mdi:check-circle" /></span>{/if}
+		{#if cancellable}
+			<span class="close-icon" aria-hidden="true"><Icon icon="mdi:close-circle" /></span>
+		{/if}
+		{#if selected}
+			<span class="selected-icon" aria-hidden="true"><Icon icon="mdi:check-circle" /></span>
+		{/if}
 
-		<div class={`hexagon c${champion.cost}`}>
-			<div class="hexagon inner" style="background-image: url({champion.image})" />
+		<div class={`avatar-frame c${champion.cost}`}>
+			<img
+				src={champion.image}
+				alt={champion.name}
+				loading={eager ? 'eager' : 'lazy'}
+				decoding="async"
+			/>
 		</div>
 
 		{#if noTooltip}
@@ -66,6 +85,16 @@
 		filter: drop-shadow(1px 5px 3px rgba(50, 50, 0, 0.5));
 	}
 
+	.avatar-frame {
+		@apply flex aspect-square items-center justify-center overflow-hidden;
+		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+	}
+
+	.avatar-frame img {
+		@apply h-4/5 w-4/5 object-cover bg-slate-900;
+		clip-path: inherit;
+	}
+
 	.hexagon {
 		@apply flex aspect-square;
 		clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
@@ -76,7 +105,7 @@
 	}
 
 	.champion-name {
-		@apply text-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold;
+		@apply text-xs absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold text-center;
 		text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black;
 	}
 

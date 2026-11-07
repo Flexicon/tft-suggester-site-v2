@@ -9,8 +9,14 @@
 </script>
 
 <div class="champions-selected">
-	{#each champions as champion}
-		<ChampionAvatar {champion} cancellable on:click={() => dispatch('deselect', champion)} />
+	{#each champions as champion (champion.name)}
+		<ChampionAvatar
+			{champion}
+			cancellable
+			eager
+			noItems
+			on:click={() => dispatch('deselect', champion)}
+		/>
 	{/each}
 </div>
 

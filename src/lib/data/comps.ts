@@ -1,28 +1,20 @@
 import { Tiers, type Comp } from '$lib/types';
 
-const countMatchesInComp = (comp: Comp, selectedNames: string[]): number => {
-	if (!selectedNames.length) return 0;
+const tierIndexByName = new Map(Tiers.map((tier, index) => [tier, index]));
 
-	const selectedSet = new Set(selectedNames);
+const getTierIndex = (tier: Comp['tier']) => tierIndexByName.get(tier) ?? Tiers.length;
+
+const countMatchesInComp = (comp: Comp, selectedSet: Set<string>): number => {
+	if (selectedSet.size === 0) return 0;
+
 	return comp.champions.reduce((count, c) => (selectedSet.has(c.name) ? count + 1 : count), 0);
 };
 
-export const compSortFn = (selectedNames: string[]) => (a: Comp, b: Comp) => {
-	const aCount = countMatchesInComp(a, selectedNames);
-	const bCount = countMatchesInComp(b, selectedNames);
-
-	if (aCount !== bCount) {
-		return bCount - aCount;
-	}
-
-	const aTierIndex = Tiers.indexOf(a.tier);
-	const bTierIndex = Tiers.indexOf(b.tier);
-
-	if (aTierIndex !== bTierIndex) {
-		return aTierIndex - bTierIndex;
-	}
-
-	return a.name.localeCompare(b.name);
+export type CompListRow = {
+	comp: Comp;
+	tierIndex: number;
+	key: string;
+	matchCount: number;
 };
 
 export type CompFilterOpts = {
@@ -30,18 +22,50 @@ export type CompFilterOpts = {
 	playstyle?: string;
 };
 
-export const compFilterFn =
-	({ selectedNames, playstyle }: CompFilterOpts) =>
-	(comp: Comp) => {
-		if (!selectedNames && !playstyle) return true;
+export const buildCompListRows = (comps: Comp[], selectedNames: string[] = []): CompListRow[] => {
+	const selectedSet = new Set(selectedNames);
 
-		if (selectedNames && countMatchesInComp(comp, selectedNames) === 0) {
-			return false;
-		}
+	return comps.map((comp) => {
+		const matchCount = countMatchesInComp(comp, selectedSet);
 
-		if (playstyle && comp.playstyle !== playstyle) {
-			return false;
-		}
+		return {
+			comp,
+			tierIndex: getTierIndex(comp.tier),
+			key: `${comp.name}-${comp.tier}-${comp.playstyle}`,
+			matchCount,
+		};
+	});
+};
 
-		return true;
-	};
+const compareCompRows = (a: CompListRow, b: CompListRow) => {
+	if (a.matchCount !== b.matchCount) {
+		return b.matchCount - a.matchCount;
+	}
+
+	if (a.tierIndex !== b.tierIndex) {
+		return a.tierIndex - b.tierIndex;
+	}
+
+	return a.comp.name.localeCompare(b.comp.name);
+};
+
+export const filterAndSortCompRows = (
+	rows: CompListRow[],
+	{ selectedNames, playstyle }: CompFilterOpts,
+) => {
+	const hasSelectedNames = Boolean(selectedNames?.length);
+
+	return rows
+		.filter((row) => {
+			if (hasSelectedNames && row.matchCount === 0) {
+				return false;
+			}
+
+			if (playstyle && row.comp.playstyle !== playstyle) {
+				return false;
+			}
+
+			return true;
+		})
+		.sort(compareCompRows);
+};

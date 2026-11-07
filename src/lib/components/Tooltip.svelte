@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
+
 	export let title = '';
 	export let disabled = false;
 
@@ -8,6 +10,29 @@
 	let isHovered = false;
 	let x: number;
 	let y: number;
+	let pendingX: number;
+	let pendingY: number;
+	let frame: number | undefined;
+
+	function cancelPendingFrame() {
+		if (frame !== undefined) {
+			cancelAnimationFrame(frame);
+			frame = undefined;
+		}
+	}
+
+	function updatePosition(event: MouseEvent) {
+		pendingX = event.pageX + xOffset;
+		pendingY = event.pageY + yOffset;
+
+		if (frame !== undefined) return;
+
+		frame = requestAnimationFrame(() => {
+			x = pendingX;
+			y = pendingY;
+			frame = undefined;
+		});
+	}
 
 	function mouseOver(event: MouseEvent) {
 		isHovered = true;
@@ -16,21 +41,23 @@
 	}
 
 	function mouseMove(event: MouseEvent) {
-		x = event.pageX + xOffset;
-		y = event.pageY + yOffset;
+		updatePosition(event);
 	}
 
 	function mouseLeave() {
 		isHovered = false;
+		cancelPendingFrame();
 	}
 
-	function focusIn(_: FocusEvent) {
+	function focusIn() {
 		isHovered = true;
 	}
 
-	function focusOut(_: FocusEvent) {
+	function focusOut() {
 		isHovered = false;
 	}
+
+	onDestroy(cancelPendingFrame);
 </script>
 
 {#if disabled}

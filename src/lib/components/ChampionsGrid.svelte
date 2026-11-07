@@ -13,8 +13,8 @@
 </script>
 
 <div class="champions-grid">
-	{#each champions as champion}
-		<ChampionAvatar {champion} on:click={() => selectChampion(champion)} />
+	{#each champions as champion (champion.name)}
+		<ChampionAvatar {champion} eager on:click={() => selectChampion(champion)} />
 	{/each}
 </div>
 
