@@ -2,6 +2,12 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "tft-suggester-site-v2",
 	"compatibility_date": "2026-11-07",
+	"routes": [
+		{
+			"pattern": "tft-suggester.nerfthis.xyz",
+			"custom_domain": true
+		}
+	],
 	"assets": {
 		"directory": "./build",
 		"html_handling": "auto-trailing-slash",

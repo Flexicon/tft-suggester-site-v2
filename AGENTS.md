@@ -23,7 +23,11 @@
 - Be careful with server-only code: `src/lib/server/data.ts` and `+*.server.ts` can use server APIs; client components cannot.
 - Selected champions are local page state; the home page intentionally does not persist selection in
   the URL.
-- The build footer reads `git rev-parse HEAD` in `src/routes/+layout.server.ts`, so builds expect a git checkout.
+- The build footer's commit hash comes from `__COMMIT_SHA__`, injected in `vite.config.ts` (uses
+  `VITE_COMMIT_SHA` when set, otherwise `git rev-parse HEAD`, otherwise `'dev'`).
+- Deployed to Cloudflare Workers as static assets. Cloudflare Workers Builds deploys automatically
+  on push to `main`, so do not deploy manually. `wrangler.jsonc` serves `./build` for
+  `tft-suggester.nerfthis.xyz`; `static/_headers` sets cache and security headers.
 
 ## Commands
 
@@ -33,3 +37,4 @@
 - Lint/format check: `npm run lint`
 - Tests: `npm test`
 - Production build: `npm run build`
+- Manual deploy (not normally needed; `main` deploys on push): `npm run deploy`
